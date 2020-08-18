@@ -17,11 +17,13 @@ class CreateUrlRequestStatsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('url_id');
             $table->unsignedBigInteger('url_request_id');
+            $table->unsignedBigInteger('user_id');
 
             $table->float('total_loading_time');
             $table->unsignedInteger('redirects_count');
             $table->timestamps();
 
+            $table->index(['user_id']);
             $table->index(['url_id']);
             $table->index(['url_request_id']);
         });

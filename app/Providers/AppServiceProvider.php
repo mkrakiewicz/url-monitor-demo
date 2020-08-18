@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Console\Commands\DeleteOldStats;
 use App\Jobs\GetStatsForUrls;
 use App\Jobs\TriggerGetStatsJobsForUrls;
+use App\Observers\UserObserver;
 use App\Services\Stats\Bulk\BulkHttpStatsFetcherService;
+use App\User;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +43,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        User::observe(UserObserver::class);
     }
 }

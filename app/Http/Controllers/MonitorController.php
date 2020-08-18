@@ -8,6 +8,7 @@ use App\Services\BulkUrlPersistenceService;
 use App\Services\Stats\Bulk\BulkHttpStatsFetcherService;
 use App\Transformers\StatCollectionTransformer;
 use App\Url;
+use App\User;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -44,10 +45,10 @@ class MonitorController extends Controller
      * @return ResponseFactory|Response
      * @throws \Throwable
      */
-    public function store(AddMonitorsRequest $request, StatCollectionTransformer $statsTransformer)
+    public function store(User $user, AddMonitorsRequest $request, StatCollectionTransformer $statsTransformer)
     {
         $urlsToAdd = (array)$request->get('items', []);
-        $this->bulkUrlPersistenceService->saveMany($urlsToAdd);
+        $this->bulkUrlPersistenceService->saveMany($user,$urlsToAdd);
 
         if ($isRequestingStats = (boolean)$request->get('stats', false)) {
             $stats = $this->fetcherService->getBulkStats($urlsToAdd, config('url-monitor.store.stat-timeout'));
@@ -60,7 +61,7 @@ class MonitorController extends Controller
      * @param Url $url
      * @return array
      */
-    public function index(Url $url)
+    public function index(User $user, Url $url)
     {
         $stats = Cache::remember(
             "url-stats-{$url->id}",

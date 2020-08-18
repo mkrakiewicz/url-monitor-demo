@@ -1,5 +1,6 @@
 <?php
 
+use App\Url;
 use App\UrlRequest;
 use Illuminate\Database\Seeder;
 
@@ -12,8 +13,11 @@ class UrlRequestSeeder extends Seeder
      */
     public function run()
     {
-        \App\Url::each(function (\App\Url $url) {
-            factory(UrlRequest::class, 10)->create(['url_id' => $url->id]);
+        Url::each(function (Url $url) {
+            factory(UrlRequest::class, 10)->state('demo')->create([
+                'url_id' => $url->id,
+                'user_id' => $url->user_id,
+            ]);
         });
     }
 }

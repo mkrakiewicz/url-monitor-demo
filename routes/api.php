@@ -13,5 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('monitors', 'MonitorController@store');
-Route::get('monitors/{url:url}', 'MonitorController@index')->where('url', '.*');
+Route::group(['middleware' => 'auth:sanctum', 'prefix' => '/user/{user}', 'as' => 'user.'], function () {
+    Route::apiResource('urls', 'UrlController');
+
+    Route::post('bulk-monitor', 'MonitorController@store');
+//    Route::get('bulk-monitors/{url:url}', 'MonitorController@index')->where('url', '.*');
+    Route::get('bulk-monitor/{url}', 'MonitorController@index');
+});

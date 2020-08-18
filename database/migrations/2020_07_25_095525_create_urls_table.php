@@ -15,10 +15,12 @@ class CreateUrlsTable extends Migration
     {
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('url');
             $table->timestamps();
 
             $table->index(['url']);
+            $table->index(['user_id']);
         });
     }
 

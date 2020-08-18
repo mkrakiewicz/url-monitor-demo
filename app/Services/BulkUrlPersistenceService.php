@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\UrlRepository;
+use App\User;
 use Illuminate\Support\Str;
 
 class BulkUrlPersistenceService
@@ -25,7 +26,7 @@ class BulkUrlPersistenceService
      * @param array $urlsToAdd
      * @param bool $cutTrailingSlash
      */
-    public function saveMany(array $urlsToAdd, bool $cutTrailingSlash = true): void
+    public function saveMany(User $user,array $urlsToAdd, bool $cutTrailingSlash = true): void
     {
         foreach ($urlsToAdd as $url) {
             if ($cutTrailingSlash) {
@@ -33,7 +34,7 @@ class BulkUrlPersistenceService
                     $url = Str::replaceLast('/', '', $url);
                 }
             }
-            $this->urlRepository->persistByUrl($url);
+            $this->urlRepository->persistByUrl($user,$url);
         }
     }
 }
