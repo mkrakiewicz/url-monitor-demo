@@ -48,7 +48,7 @@ class MonitorController extends Controller
     public function store(User $user, AddMonitorsRequest $request, StatCollectionTransformer $statsTransformer)
     {
         $urlsToAdd = (array)$request->get('items', []);
-        $this->bulkUrlPersistenceService->saveMany($user,$urlsToAdd);
+        $this->bulkUrlPersistenceService->saveMany($user, $urlsToAdd);
 
         if ($isRequestingStats = (boolean)$request->get('stats', false)) {
             $stats = $this->fetcherService->getBulkStats($urlsToAdd, config('url-monitor.store.stat-timeout'));
@@ -72,6 +72,6 @@ class MonitorController extends Controller
                     config('url-monitor.index.last-stats-minutes')
                 );
             });
-        return [$url->url => $stats];
+        return ['url' => $url, 'stats' => $stats];
     }
 }

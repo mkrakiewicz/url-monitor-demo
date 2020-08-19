@@ -20,4 +20,10 @@ class UrlRequestStat extends Model
     {
         return $this->belongsTo(Url::class);
     }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

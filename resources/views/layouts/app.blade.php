@@ -11,7 +11,7 @@
     @endphp
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="api-token" content="{{ Session::get(App\Providers\AuthServiceProvider::API_TOKEN) }}">
+    <meta name="api-token" content="{{ \Illuminate\Support\Facades\Session::get(App\Providers\AuthServiceProvider::API_TOKEN) }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 

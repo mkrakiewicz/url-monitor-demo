@@ -16,7 +16,9 @@ class UrlRequestRepository
     public function createCompleted(Url $url): UrlRequest
     {
         /** @var UrlRequest $model */
-        $model = $url->requests()->create(['status' => 'completed']);
+        $model = $url->requests()->make(['status' => 'completed']);
+        $model->user()->associate($url->user);
+        $model->save();
         return $model;
     }
 
@@ -27,7 +29,9 @@ class UrlRequestRepository
     public function createPending(Url $url): UrlRequest
     {
         /** @var UrlRequest $model */
-        $model = $url->requests()->create(['status' => 'pending']);
+        $model = $url->requests()->make(['status' => 'pending']);
+        $model->user()->associate($url->user);
+        $model->save();
         return $model;
     }
 
@@ -37,7 +41,7 @@ class UrlRequestRepository
      */
     public function deleteOldStats(int $olderThanMinutes): Collection
     {
-        $requests = UrlRequest::where('created_at', '<', Carbon::now()->subMinutes(10))->get();
+        $requests = UrlRequest::where('created_at', '<', Carbon::now()->subMinutes($olderThanMinutes))->get();
         $requests->each(function (UrlRequest $urlRequest) {
             $urlRequest->stat()->delete();
             $urlRequest->delete();

@@ -24,6 +24,7 @@ class UrlRequestStatRepository
             'redirects_count' => $stats->getNumberOfRedirects()
         ]);
         $statModel->url()->associate($url);
+        $statModel->user()->associate($url->user);
         $statModel->save();
         return $statModel;
     }

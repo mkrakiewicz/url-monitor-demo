@@ -13,11 +13,11 @@ class StatCreatorService
      * @param StatCounter $counter
      * @return UrlStatsBuffer
      */
-    public function collectStats(array $urls, StatCounter $counter): UrlStatsBuffer
+    public function collectStats(iterable $urls, StatCounter $counter): UrlStatsBuffer
     {
         $stats = new UrlStatsBuffer();
 
-        foreach ($urls as $bla=>$url) {
+        foreach ($urls as $url) {
             $stats->addStat($url, $this->createStat($url, $counter));
         }
         return $stats;
@@ -28,7 +28,7 @@ class StatCreatorService
         if (!$counter->isCompleted($url)) {
             return null;
         }
-        $redirects = (int) $counter->getRedirects($url);
+        $redirects = (int)$counter->getRedirects($url);
 
         $time = $counter->getTime($url);
         return new UrlStat($url, $time, $redirects);
