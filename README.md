@@ -3,6 +3,9 @@
 ### Overview
 
 Url Monitor written in Laravel for demo purposes.
+Allows to add several urls at once, which are then monitored by a background job.
+The job will gather stats for the urls for a given period (10 minutes by default).
+Currently there is no authentication.
 
 
 - The jobs are triggered to be ran every minute. 
