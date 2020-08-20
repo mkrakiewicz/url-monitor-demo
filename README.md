@@ -9,6 +9,7 @@ Url Monitor written in Laravel for demo purposes.
 - Urls are fetched using Guzzle using promises (several at once)
 - There is a bug in Guzzle which causes all promises to fail when one is causing an exception
  (when e.g. Linkedin returns status 999), patch is added in composer.json
+- There is no authentication for now 
 - There are some tests 
 
 ### Api overview
