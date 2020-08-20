@@ -17,7 +17,6 @@ class UrlSeeder extends Seeder
         collect([
             ['url' => 'https://onet.pl',],
             ['url' => 'http://socialmention.com'],
-            ['url' => 'http://test-redirects.137.software'],
             ['url' => 'https://google.com'],
         ])->each(function (array $urlArr) use ($user) {
             $url = factory(Url::class)->state('demo')->make($urlArr);
