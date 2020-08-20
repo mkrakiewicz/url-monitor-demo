@@ -15,7 +15,6 @@ class UrlSeeder extends Seeder
         factory(Url::class)->createMany([
             ['url' => 'https://onet.pl'],
             ['url' => 'http://socialmention.com'],
-            ['url' => 'http://test-redirects.137.software'],
             ['url' => 'https://google.com'],
         ]);
 
