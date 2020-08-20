@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     @php
-        use App\User;
-        /** @var User $user */
-        $user = \Illuminate\Support\Facades\Auth::user();
+        /** @var App\User $user */
     @endphp
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">

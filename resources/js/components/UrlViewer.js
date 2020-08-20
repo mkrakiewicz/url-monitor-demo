@@ -17,6 +17,9 @@ function UrlViewer (user) {
             setUrls(response.data)
         }).catch(response => {
             console.log('fail', response)
+            if (response.response.status === 401) {
+                alert("Unauthorized. Please login again.")
+            }
         })
     }, [])
 
@@ -32,6 +35,9 @@ function UrlViewer (user) {
             setShowModal(true)
         }).catch(response => {
             console.log('fail', response)
+            if (response.response.status === 401) {
+                alert("Unauthorized. Please login again.")
+            }
         })
     }, [])
 

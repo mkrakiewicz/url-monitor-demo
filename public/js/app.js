@@ -82009,7 +82009,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var displayStats = function displayStats(urlData) {
-  if (urlData.stats.size === 0) {
+  if (urlData.stats.length === 0) {
     return 'No stats';
   }
 
@@ -82113,6 +82113,10 @@ function UrlViewer(user) {
       setUrls(response.data);
     })["catch"](function (response) {
       console.log('fail', response);
+
+      if (response.response.status === 401) {
+        alert("Unauthorized. Please login again.");
+      }
     });
   }, []);
   var closeModal = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(function () {
@@ -82126,6 +82130,10 @@ function UrlViewer(user) {
       setShowModal(true);
     })["catch"](function (response) {
       console.log('fail', response);
+
+      if (response.response.status === 401) {
+        alert("Unauthorized. Please login again.");
+      }
     });
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

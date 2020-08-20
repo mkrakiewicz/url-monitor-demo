@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 
 let displayStats = function (urlData) {
-    if (urlData.stats.size === 0) {
+    if (urlData.stats.length === 0) {
         return 'No stats'
     }
 
