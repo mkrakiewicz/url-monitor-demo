@@ -36,12 +36,10 @@ class UrlRequestStatRepository
      */
     public function getLatestStats(Url $url, int $minuteLimit = 10): Collection
     {
-        $stats = $url->stats()->where($url->stats()->createdAt(), '>', now()
-            ->subMinutes($minuteLimit))->latest()->get([
-            'created_at as time',
-            'total_loading_time as loadingTime',
-            'redirects_count as redirectCount'
-        ]);
+        $createdAt = "{$url->requests()->getModel()->getTable()}.{$url->requests()->createdAt()}";
+        $time = now()->subMinutes($minuteLimit);
+        $stats = $url->requests()->with('stat')
+            ->where($createdAt, '>', $time)->latest()->get();
         return $stats;
     }
 }

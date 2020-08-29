@@ -72,6 +72,6 @@ class MonitorController extends Controller
                     config('url-monitor.index.last-stats-minutes')
                 );
             });
-        return ['url' => $url, 'stats' => $stats];
+        return ['url' => $url, 'requests' => $stats];
     }
 }

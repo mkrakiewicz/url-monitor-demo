@@ -49,13 +49,13 @@ class User extends Authenticatable
         return $this->hasMany(Url::class);
     }
 
-    public function urlRequests()
+    public function requests()
     {
-        return $this->hasMany(UrlRequest::class);
+        return $this->hasManyThrough(UrlRequest::class, Url::class);
     }
 
-    public function urlRequestStats()
+    public function stats()
     {
-        return $this->hasMany(UrlRequestStat::class);
+        return $this->hasManyThrough(UrlRequestStat::class, Url::class);
     }
 }

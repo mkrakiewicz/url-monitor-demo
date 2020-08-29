@@ -1,24 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import ReactDOM from 'react-dom'
 import UrlStats from './UrlStats'
+import Logger from 'js-logger'
+import classNames from 'classnames'
+import UrlViewerRow from './UrlViewerRow'
 
-function UrlViewer (user) {
+function UrlViewer ({ user }) {
 
     const [urls, setUrls] = useState([])
+    const [isHighlight, setIsHighlight] = useState(false)
     const [showModal, setShowModal] = useState(false)
-    const [modalUrlData, setModalUrlData] = useState({ stats: [], url: {} })
+    const [modalUrlData, setModalUrlData] = useState({ requests: [], url: {} })
 
     useEffect(() => {
         let appurl = window.API_URL
-        console.log('appurl', appurl)
-        console.log('user', user)
+        Logger.debug('appurl', appurl)
+        Logger.debug('user', user)
         axios.get(`${appurl}/api/user/1/urls`).then(response => {
-            console.log('success', response)
             setUrls(response.data)
         }).catch(response => {
-            console.log('fail', response)
+            Logger.debug('fail', response)
             if (response.response.status === 401) {
-                alert("Unauthorized. Please login again.")
+                alert('Unauthorized. Please login again.')
             }
         })
     }, [])
@@ -30,32 +33,24 @@ function UrlViewer (user) {
     let viewStats = useCallback((url) => {
         let appurl = window.API_URL
         axios.get(`${appurl}/api/user/1/bulk-monitor/${url.id}`).then(response => {
-            console.log('success', response)
+            Logger.info('success', response)
             setModalUrlData(response.data)
             setShowModal(true)
         }).catch(response => {
-            console.log('fail', response)
+            Logger.error('fail', response)
             if (response.response.status === 401) {
-                alert("Unauthorized. Please login again.")
+                alert('Unauthorized. Please login again.')
             }
         })
     }, [])
 
     return (
-        <div className="card">
+        <div className="">
             <UrlStats urlData={modalUrlData} show={showModal} onCloseRequest={closeModal}/>
-            <div className="card-header">View Urls</div>
-
-            <div className="card-body">
-                {urls.map((url) => {
-                    // let viewUrlStat = useCallback(() => viewStats(url), [])
-                    return (<div key={url.id} className='row'>
-                        <div className="col-md-4">{url.url}</div>
-                        <div className="col-md-4"><a className="btn btn-primary" onClick={() => viewStats(url)}>View
-                            Stats</a></div>
-                    </div>)
-                })}
-            </div>
+            <h3>Your sites</h3>
+            {urls.map((url) => {
+                return (<UrlViewerRow key={url.id} url={url} viewUrlStatsClicked={viewStats}/>)
+            })}
         </div>
     )
 }

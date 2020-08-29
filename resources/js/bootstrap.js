@@ -1,12 +1,18 @@
-import ReactDOM from 'react-dom'
-
 window._ = require('lodash')
 
 /**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
+ * Logger
  */
+let Logger = require('js-logger')
+Logger.useDefaults();
+
+window.API_URL = process.env.MIX_API_URL
+window.APP_ENV = window.APP_ENV || process.env.MIX_APP_ENV // Allow to change APP_ENV without rebuild
+let logsEnabled = !!(window.LOGS_ENABLED || process.env.MIX_LOGS_ENABLED || window.APP_ENV !== 'local')
+
+if (!logsEnabled) {
+    Logger.setLevel(Logger.OFF)
+}
 
 try {
     window.Popper = require('popper.js').default
@@ -15,21 +21,23 @@ try {
     require('bootstrap')
 } catch (e) {}
 
+
+
+Logger.info('APP_ENV', window.APP_ENV)
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 let apiToken = $('meta[name="api-token"]').attr('content')
+Logger.debug('token', apiToken)
 
 window.axios = require('axios')
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 window.axios.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`
-window.axios.defaults.withCredentials = true;
+window.axios.defaults.withCredentials = true
 
-window.API_URL = process.env.MIX_API_URL
-console.log('token', apiToken)
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
