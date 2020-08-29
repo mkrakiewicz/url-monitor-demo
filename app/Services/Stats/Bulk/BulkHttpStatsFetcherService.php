@@ -91,7 +91,7 @@ class BulkHttpStatsFetcherService
 
                 $counter->addTime($url, $totalTime);
             }
-        ])->then(function () use ($url, $counter) {
+        ])->then(function ($data) use ($url, $counter) {
             $counter->setCompleted($url);
             Log::info("Request to $url completed.");
         }, function () use ($url) {

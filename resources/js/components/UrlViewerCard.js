@@ -8,19 +8,39 @@ function UrlViewerCard ({ url, viewUrlStatsClicked }) {
     }, [])
     return (<>
             <h3>{url.url}</h3>
-            <div className="card mb-5">
-                <div className="card-body">
-                    <div className={classNames({ 'row': true, 'py-2': true })}>
-                        <div className="col-sm-7">
-                            Average Total Loading Time<div className='badge badge-info'>{getTime(url)}</div>
-                            <br/>
-                            Average Redirects<div className='badge badge-info'>{getRedirects(url)}</div>
+            <div className="mb-5 row">
+                <div className="col-md-5">
+                    <div className="card">
+                        <div className="card-header">Actions</div>
+                        <div className="card-body">
+                            <div className={classNames({ 'row': true })}>
+                                <div className="col-sm-6">
+                                    <a className="btn btn-primary" onClick={clickCallback}>View Stats</a>
+                                </div>
+                                <div className="col-sm-6">
+                                    <a className='btn btn-light' href={url.url} target={'_blank'}>Visit Site</a>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-sm-3 text-right">
-                            <a className="btn btn-primary" onClick={clickCallback}>View Stats</a>
+                    </div>
+                </div>
+                <div className="col-md-4">
+                    <div className="card  text-center">
+                        <div className="card-header">
+                            Average Total Loading Time
                         </div>
-                        <div className="col-sm-2 text-right">
-                            <a className='btn btn-primary' href={url.url} target={'_blank'}>Visit</a>
+                        <div className="card-body">
+                            <h4>{getTime(url)}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3">
+                    <div className="card  text-center">
+                        <div className="card-header">
+                            Average Redirects
+                        </div>
+                        <div className="card-body">
+                            <h4>{getRedirects(url)}</h4>
                         </div>
                     </div>
                 </div>
@@ -31,14 +51,20 @@ function UrlViewerCard ({ url, viewUrlStatsClicked }) {
 
 let getTime = function (url) {
     if (url.avg_loading_time === null) {
-        return 'N/A'
+        if (url.requests_count > 0) {
+            return <div className='badge badge-danger'>{url.requests_count}+ Timeouts</div>
+        }
+        return <div className='badge badge-light'>Not Available</div>
     }
     return parseFloat(url.avg_loading_time.toFixed(3)) + 's'
 }
 
 let getRedirects = function (url) {
     if (url.avg_redirect_count === null) {
-        return 'N/A'
+        if (url.requests_count > 0) {
+            return <div className='badge badge-danger'>{url.requests_count}+ Timeouts</div>
+        }
+        return <div className='badge badge-light'>Not Available</div>
     }
     return parseInt(url.avg_redirect_count)
 }

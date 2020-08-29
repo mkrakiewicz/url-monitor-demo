@@ -26,23 +26,28 @@ class UrlRepository
      */
     public function getLatestForUserWithAverages(User $user, int $minuteLimit): Collection
     {
-        $urlsRelation = $user->urls();
         $statsRelation = $user->stats();
-        $createdAt = "{$statsRelation->getModel()->getTable()}.{$statsRelation->createdAt()}";
+        $statsCreatedAt = "{$statsRelation->getModel()->getTable()}.{$statsRelation->createdAt()}";
+        $requestsRelation = $user->requests();
+        $requestsCreatedAt = "{$requestsRelation->getModel()->getTable()}.{$requestsRelation->createdAt()}";
 
         $time = now()->subMinutes($minuteLimit);
-        $stats = $urlsRelation->withCount([
-            'stats as avg_loading_time' => function (Builder $query) use ($createdAt, $time) {
+        $stats = $user->urls()->withCount([
+            'requests' => function (Builder $query) use ($requestsCreatedAt, $time) {
+                return $query->where($requestsCreatedAt, '>', $time);
+
+            },
+            'stats as avg_loading_time' => function (Builder $query) use ($statsCreatedAt, $time) {
                 return $query
                     ->select(\DB::raw('avg(total_loading_time)'))
                     ->latest()
-                    ->where($createdAt, '>', $time);
+                    ->where($statsCreatedAt, '>', $time);
             },
-            'stats as avg_redirect_count' => function (Builder $query) use ($createdAt, $time) {
+            'stats as avg_redirect_count' => function (Builder $query) use ($statsCreatedAt, $time) {
                 return $query
                     ->select(\DB::raw('avg(redirects_count)'))
                     ->latest()
-                    ->where($createdAt, '>', $time);
+                    ->where($statsCreatedAt, '>', $time);
             }
         ])->latest()->get();
         return $stats;

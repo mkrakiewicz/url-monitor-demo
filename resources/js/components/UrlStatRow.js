@@ -12,13 +12,13 @@ function UrlStatRow ({ time, loadTime, redirects }) {
     }, [])
 
     return (
-        <div className={classNames({ 'row': true, 'bg-light': isHighlight })}
-             onMouseEnter={enableHighlightCallback}
-             onMouseLeave={disableHighlightCallback}>
-            <div className='col-md-4'>{time}</div>
-            <div className='col-md-4'>{loadTime}</div>
-            <div className='col-md-4'>{redirects}</div>
-        </div>
+        <tr className={classNames({ 'bg-light': isHighlight })}
+            onMouseEnter={enableHighlightCallback}
+            onMouseLeave={disableHighlightCallback}>
+            <td>{time}</td>
+            <td>{loadTime}</td>
+            <td>{redirects}</td>
+        </tr>
     )
 }
 
