@@ -41,6 +41,6 @@ class UrlController extends Controller
 //        ])->get(['urls.id'])->dd();
 
 //        \DB::getQueryLog()
-        return $urlRepository->getLatestForUserWithAverages($user);
+        return $urlRepository->getLatestForUserWithAverages($user, config('url-monitor.index.last-stats-minutes'));
     }
 }

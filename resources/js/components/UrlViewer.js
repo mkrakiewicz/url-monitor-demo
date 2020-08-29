@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import ReactDOM from 'react-dom'
-import UrlStats from './UrlStats'
+import React, { useCallback, useEffect, useState } from 'react'
+import UrlStatsModal from './UrlStatsModal'
 import Logger from 'js-logger'
-import classNames from 'classnames'
-import UrlViewerRow from './UrlViewerRow'
+import UrlViewerCard from './UrlViewerCard'
 
 function UrlViewer ({ user }) {
 
@@ -46,11 +44,11 @@ function UrlViewer ({ user }) {
 
     return (
         <div className="">
-            <UrlStats urlData={modalUrlData} show={showModal} onCloseRequest={closeModal}/>
-            <h3>Your sites</h3>
+            <div className="mb-5"><h1>Your sites</h1></div>
             {urls.map((url) => {
-                return (<UrlViewerRow key={url.id} url={url} viewUrlStatsClicked={viewStats}/>)
+                return (<UrlViewerCard key={url.id} url={url} viewUrlStatsClicked={viewStats}/>)
             })}
+            <UrlStatsModal urlData={modalUrlData} show={showModal} onCloseRequest={closeModal}/>
         </div>
     )
 }

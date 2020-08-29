@@ -24,7 +24,7 @@ class UrlRepository
      * @param int $minuteLimit
      * @return Collection
      */
-    public function getLatestForUserWithAverages(User $user, int $minuteLimit = 10): Collection
+    public function getLatestForUserWithAverages(User $user, int $minuteLimit): Collection
     {
         $urlsRelation = $user->urls();
         $statsRelation = $user->stats();

@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\AuthServiceProvider;
 use App\Providers\RouteServiceProvider;
 use App\User;
-use Illuminate\Cookie\CookieJar;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -33,20 +34,14 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-    /**
-     * @var CookieJar
-     */
-    private $cookieJar;
 
     /**
      * Create a new controller instance.
      *
-     * @param CookieJar $cookieJar
      */
-    public function __construct(CookieJar $cookieJar)
+    public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->cookieJar = $cookieJar;
     }
 
     /**
@@ -55,9 +50,14 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, User $user)
     {
-        $token = $user->createToken('personal');
-        $cookie = $this->cookieJar->forever(AuthServiceProvider::API_TOKEN, $token->plainTextToken);
-        $this->cookieJar->queue($cookie);
+        Cookie::queue(
+            Cookie::forever(
+                AuthServiceProvider::API_TOKEN,
+                $user->createToken('personal')->plainTextToken
+            )
+        );
+
+        Session::flash('status', "You are logged in!");
     }
 
     public function logout(Request $request)
@@ -66,8 +66,11 @@ class LoginController extends Controller
         $userBeforeLogout = $request->user();
         $logoutResult = $this->originalLogout($request);
         $userBeforeLogout->tokens()->delete();
-        $cookie = $this->cookieJar->forget(AuthServiceProvider::API_TOKEN);
-        $this->cookieJar->queue($cookie);
+
+        Cookie::queue(
+            Cookie::forget(AuthServiceProvider::API_TOKEN)
+        );
+
         return $logoutResult;
     }
 }
