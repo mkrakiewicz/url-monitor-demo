@@ -21,10 +21,11 @@ class UrlRequestStatRepository
         /** @var UrlRequestStat $statModel */
         $statModel = $request->stat()->make([
             'total_loading_time' => $stats->getTotalTime(),
-            'redirects_count' => $stats->getNumberOfRedirects()
+            'redirects_count' => $stats->getNumberOfRedirects(),
+            'status' => $stats->getStatus()
         ]);
         $statModel->url()->associate($url);
-        $statModel->user()->associate($url->user);
+//        $statModel->user()->associate($url->user);
         $statModel->save();
         return $statModel;
     }
@@ -32,14 +33,36 @@ class UrlRequestStatRepository
     /**
      * @param Url $url
      * @param int $minuteLimit
-     * @return Collection
+     * @return UrlRequestStat|null
      */
-    public function getLatestStats(Url $url, int $minuteLimit = 10): Collection
+    public function getLatestStat(Url $url, int $minuteLimit): ?UrlRequestStat
     {
-        $createdAt = "{$url->requests()->getModel()->getTable()}.{$url->requests()->createdAt()}";
-        $time = now()->subMinutes($minuteLimit);
-        $stats = $url->requests()->with('stat')
-            ->where($createdAt, '>', $time)->latest()->get();
-        return $stats;
+        /** @var UrlRequestStat|null $model */
+        $model = $this->getRecentQuery($url, $minuteLimit)->first();
+        return $model;
     }
+
+    /**
+     * @param Url $url
+     * @param string $avg
+     * @param int $minuteLimit
+     * @return float|null
+     */
+    public function getRecentStatsAvg(Url $url, string $avg, int $minuteLimit): ?float
+    {
+        return $this->getRecentQuery($url, $minuteLimit)->avg($avg);
+    }
+
+    /**
+     * @param Url $url
+     * @param int $minuteLimit
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    private function getRecentQuery(Url $url, int $minuteLimit)
+    {
+        $createdAt = "{$url->stats()->getModel()->getTable()}.{$url->stats()->createdAt()}";
+        $time = now()->subMinutes($minuteLimit);
+        return $url->allStats()->where($createdAt, '>', $time);
+    }
+
 }

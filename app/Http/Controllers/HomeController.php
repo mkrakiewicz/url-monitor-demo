@@ -25,20 +25,6 @@ class HomeController extends Controller
      */
     public function index(UrlRepository $urlRepository)
     {
-
-//        $user = User::find(1);
-//        $urlRepository->getLatestForUserWithAverages($user)->dd();
-////        return $user->urls()->withCount(['stats'=>])->get()->dd();
-//        return $user->urls()->withCount([
-//            'stats as avg_loading_time' => function ($query) {
-////                return $builder->select(\DB::raw("AVG('total_loading_time') as total_loading_time"))->groupBy(['laravel_through_key']);
-////                return $builder->avg('total_loading_time');
-//                return $query->select(\DB::raw('avg(total_loading_time)'));
-//            },
-//            'stats as avg_redirect_count' => function ($query) {
-//                return $query->select(\DB::raw('avg(redirects_count)'));
-//            }
-//        ])->dd();
         return view('home');
     }
 }

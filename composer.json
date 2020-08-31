@@ -17,7 +17,8 @@
         "laravel/sanctum": "^2.4",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
-        "monolog/monolog": "^2.1"
+        "monolog/monolog": "^2.1",
+        "staudenmeir/eloquent-has-many-deep": "^1.12"
     },
     "require-dev": {
         "ext-json": "*",

@@ -1,21 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react'
+'use stritc';
+import Url from "../entities/Url";
+
+const React = require('react')
+import {useCallback, useEffect, useState} from 'react'
 import UrlStatsModal from './UrlStatsModal'
-import Logger from 'js-logger'
 import UrlViewerCard from './UrlViewerCard'
+import Logger = require("js-logger");
+import IUrlResponse from "../responses/IUrlResponse";
 
-function UrlViewer ({ user }) {
 
-    const [urls, setUrls] = useState([])
+function UrlViewer({user}) {
+
+    const [urls, setUrls] = useState<Array<Url>>([])
     const [isHighlight, setIsHighlight] = useState(false)
     const [showModal, setShowModal] = useState(false)
-    const [modalUrlData, setModalUrlData] = useState({ requests: [], url: {} })
+    const [modalUrlData, setModalUrlData] = useState({requests: [], url: {}})
 
     useEffect(() => {
-        let appurl = window.API_URL
+        let appurl = (window as any).API_URL
         Logger.debug('appurl', appurl)
         Logger.debug('user', user)
-        axios.get(`${appurl}/api/user/1/urls`).then(response => {
-            setUrls(response.data)
+        window.axios.get<Array<IUrlResponse>>(`${appurl}/api/user/${user.id}/urls`).then((response) => {
+            let urls = response.data.map((data)=> new Url(data));
+            setUrls(urls)
         }).catch(response => {
             Logger.debug('fail', response)
             if (response.response.status === 401) {
@@ -28,9 +35,9 @@ function UrlViewer ({ user }) {
         setShowModal(false)
     }, [])
 
-    let viewStats = useCallback((url) => {
-        let appurl = window.API_URL
-        axios.get(`${appurl}/api/user/1/bulk-monitor/${url.id}`).then(response => {
+    let viewStats = useCallback((url: Url) => {
+        let appurl = (window as any).API_URL
+        window.axios.get(`${appurl}/api/user/${user.id}/bulk-monitor/${url.id}`).then(response => {
             Logger.info('success', response)
             setModalUrlData(response.data)
             setShowModal(true)
@@ -41,15 +48,16 @@ function UrlViewer ({ user }) {
             }
         })
     }, [])
-
     return (
-        <div className="">
-            <div className="mb-5"><h1>Your sites</h1></div>
-            {urls.map((url) => {
+
+        <>
+            {urls.length ? urls.map((url) => {
                 return (<UrlViewerCard key={url.id} url={url} viewUrlStatsClicked={viewStats}/>)
-            })}
+            }) : <div className='alert alert-info'>
+                Nothing here! You can add a url to monitor using the button above.
+            </div>}
             <UrlStatsModal urlData={modalUrlData} show={showModal} onCloseRequest={closeModal}/>
-        </div>
+        </>
     )
 }
 

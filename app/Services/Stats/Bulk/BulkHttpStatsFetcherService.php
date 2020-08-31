@@ -90,6 +90,9 @@ class BulkHttpStatsFetcherService
                 Log::debug("$url: added time: $totalTime");
 
                 $counter->addTime($url, $totalTime);
+                if ($stats->hasResponse()) {
+                    $counter->setStatus($url, $stats->getResponse()->getStatusCode());
+                }
             }
         ])->then(function ($data) use ($url, $counter) {
             $counter->setCompleted($url);

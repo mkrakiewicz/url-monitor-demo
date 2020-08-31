@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasApiTokens;
+    use HasRelationships;
 
 
     /**
@@ -56,6 +58,7 @@ class User extends Authenticatable
 
     public function stats()
     {
-        return $this->hasManyThrough(UrlRequestStat::class, Url::class);
+//        return $this->hasManyDeep(UrlRequestStat::class, [Url::class, UrlRequest::class]);
+        return $this->hasManyDeep(UrlRequestStat::class, [Url::class, UrlRequest::class]);
     }
 }

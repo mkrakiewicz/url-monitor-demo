@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddMonitorsRequest;
+use App\Repositories\UrlRequestRepository;
 use App\Repositories\UrlRequestStatRepository;
 use App\Services\BulkUrlPersistenceService;
 use App\Services\Stats\Bulk\BulkHttpStatsFetcherService;
@@ -25,18 +26,18 @@ class MonitorController extends Controller
      */
     private $fetcherService;
     /**
-     * @var UrlRequestStatRepository
+     * @var UrlRequestRepository
      */
     private $urlRequestStatRepository;
 
     public function __construct(
         BulkUrlPersistenceService $bulkUrlPersistenceService,
-        UrlRequestStatRepository $urlRequestStatRepository,
+        UrlRequestRepository $urlRequestRepository,
         BulkHttpStatsFetcherService $fetcherService
     ) {
         $this->bulkUrlPersistenceService = $bulkUrlPersistenceService;
         $this->fetcherService = $fetcherService;
-        $this->urlRequestStatRepository = $urlRequestStatRepository;
+        $this->urlRequestStatRepository = $urlRequestRepository;
     }
 
     /**
@@ -67,7 +68,7 @@ class MonitorController extends Controller
             "url-stats-{$url->id}",
             \DateInterval::createFromDateString('1 minute'),
             function () use ($url) {
-                return $this->urlRequestStatRepository->getLatestStats(
+                return $this->urlRequestStatRepository->getRecentWithStats(
                     $url,
                     config('url-monitor.index.last-stats-minutes')
                 );

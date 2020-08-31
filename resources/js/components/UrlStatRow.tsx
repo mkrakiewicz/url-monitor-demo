@@ -1,7 +1,9 @@
-import React, { useCallback, useState } from 'react'
 import classNames from 'classnames'
+import StatusCode from './StatusCode'
+import {useCallback, useState} from "react";
+const React = require('react')
 
-function UrlStatRow ({ time, loadTime, redirects }) {
+function UrlStatRow ({ time, loadTime, redirects, statusCode }) {
     const [isHighlight, setIsHighlight] = useState(false)
 
     let enableHighlightCallback = useCallback(() => {
@@ -18,6 +20,7 @@ function UrlStatRow ({ time, loadTime, redirects }) {
             <td>{time}</td>
             <td>{loadTime}</td>
             <td>{redirects}</td>
+            <td><StatusCode statusCode={statusCode}/></td>
         </tr>
     )
 }

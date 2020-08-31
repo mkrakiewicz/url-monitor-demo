@@ -6,6 +6,7 @@ class StatCounter
 {
     private const REDIRECTS_KEY = 'redirects';
     private const TIME_KEY = 'time';
+    private const STATUS = 'status';
 
     private $stats = [];
 
@@ -47,8 +48,22 @@ class StatCounter
         $this->stats[$url]['ok'] = true;
     }
 
-    public function isCompleted(string $url):bool
+    public function isCompleted(string $url): bool
     {
         return $this->stats[$url]['ok'] ?? false;
+    }
+
+    public function setStatus(string $url, int $statusCode)
+    {
+        $this->stats[$url][static::STATUS] = $statusCode;
+    }
+
+    /**
+     * @param string $url
+     * @return int|null
+     */
+    public function getStatusCode(string $url): ?int
+    {
+        return $this->stats[$url][static::STATUS];
     }
 }

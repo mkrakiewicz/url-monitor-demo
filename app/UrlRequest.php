@@ -2,11 +2,16 @@
 
 namespace App;
 
+use App\Events\UrlRequestCreated;
 use Illuminate\Database\Eloquent\Model;
 
 class UrlRequest extends Model
 {
     protected $fillable = ['status'];
+
+    protected $dispatchesEvents = [
+        'created' => UrlRequestCreated::class
+    ];
 
     public function stat()
     {
@@ -17,10 +22,9 @@ class UrlRequest extends Model
     {
         return $this->belongsTo(Url::class);
     }
-
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+//
+//    public function user()
+//    {
+//        return $this->(User::class, Url::class);
+//    }
 }

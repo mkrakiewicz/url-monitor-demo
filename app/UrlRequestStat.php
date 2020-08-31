@@ -2,13 +2,19 @@
 
 namespace App;
 
+use App\Events\UrlRequestStatCreated;
 use Illuminate\Database\Eloquent\Model;
 
 class UrlRequestStat extends Model
 {
     protected $fillable = [
         'total_loading_time',
-        'redirects_count'
+        'redirects_count',
+        'status'
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => UrlRequestStatCreated::class
     ];
 
     public function request()
@@ -22,8 +28,8 @@ class UrlRequestStat extends Model
     }
 
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+//    public function user()
+//    {
+//        return $this->hasOneThrough(User::class, UrlRequest::class);
+//    }
 }

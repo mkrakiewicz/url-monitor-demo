@@ -1,6 +1,6 @@
-import React from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import UrlStatsTable from './UrlStatsTable'
+const React = require('react')
 
 function UrlStatsModal ({ urlData, show, onCloseRequest }) {
     return (

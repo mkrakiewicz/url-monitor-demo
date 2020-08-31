@@ -17,7 +17,7 @@ class UrlRequestRepository
     {
         /** @var UrlRequest $model */
         $model = $url->requests()->make(['status' => 'completed']);
-        $model->user()->associate($url->user);
+//        $model->user()->associate($url->user);
         $model->save();
         return $model;
     }
@@ -30,7 +30,7 @@ class UrlRequestRepository
     {
         /** @var UrlRequest $model */
         $model = $url->requests()->make(['status' => 'pending']);
-        $model->user()->associate($url->user);
+//        $model->user()->associate($url->user);
         $model->save();
         return $model;
     }
@@ -47,5 +47,17 @@ class UrlRequestRepository
             $urlRequest->delete();
         });
         return $requests;
+    }
+
+    /**
+     * @param Url $url
+     * @param int $minuteLimit
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRecentWithStats(Url $url, int $minuteLimit): Collection
+    {
+        $createdAt = "{$url->requests()->getModel()->getTable()}.{$url->requests()->createdAt()}";
+        $time = now()->subMinutes($minuteLimit);
+        return $url->requests()->with('stat')->where($createdAt, '>', $time)->get();
     }
 }

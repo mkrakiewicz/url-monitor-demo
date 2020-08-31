@@ -13,10 +13,10 @@ class UrlRequestSeeder extends Seeder
      */
     public function run()
     {
-        Url::each(function (Url $url) {
+        Url::limit(15)->get()->each(function (Url $url) {
             factory(UrlRequest::class, 10)->state('demo')->create([
                 'url_id' => $url->id,
-                'user_id' => $url->user_id,
+//                'user_id' => $url->user_id,
             ]);
         });
     }

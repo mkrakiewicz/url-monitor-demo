@@ -13,6 +13,8 @@ class UrlSeeder extends Seeder
      */
     public function run()
     {
+        factory(Url::class, 200)->state('demo')->create();
+
         $user = User::where(['email' => 'user@test.com'])->firstOrFail();
         collect([
             ['url' => 'https://onet.pl',],
@@ -23,7 +25,5 @@ class UrlSeeder extends Seeder
             $url->user()->associate($user);
             $url->save();
         });
-
-        factory(Url::class, 25)->state('demo')->create();
     }
 }

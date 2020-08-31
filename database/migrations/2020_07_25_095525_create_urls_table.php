@@ -17,10 +17,15 @@ class CreateUrlsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('url');
+            $table->float('avg_total_loading_time')->nullable();
+            $table->float('avg_redirects_count')->nullable();
+            $table->integer('last_status')->nullable();
+
             $table->timestamps();
 
             $table->index(['url']);
             $table->index(['user_id']);
+//            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

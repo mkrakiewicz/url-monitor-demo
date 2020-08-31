@@ -16,12 +16,17 @@ class UrlStat
      * @var int
      */
     private $numberOfRedirects;
+    /**
+     * @var int
+     */
+    private $status;
 
-    public function __construct(string $url, float $totalTime, int $numberOfRedirects)
+    public function __construct(string $url, float $totalTime, int $numberOfRedirects, int $status)
     {
         $this->url = $url;
         $this->totalTime = $totalTime;
         $this->numberOfRedirects = $numberOfRedirects;
+        $this->status = $status;
     }
 
     /**
@@ -46,5 +51,13 @@ class UrlStat
     public function getNumberOfRedirects(): int
     {
         return $this->numberOfRedirects;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
     }
 }

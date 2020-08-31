@@ -29,8 +29,9 @@ class StatCreatorService
             return null;
         }
         $redirects = (int)$counter->getRedirects($url);
+        $status = (int)$counter->getStatusCode($url);
 
         $time = $counter->getTime($url);
-        return new UrlStat($url, $time, $redirects);
+        return new UrlStat($url, $time, $redirects, $status);
     }
 }

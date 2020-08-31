@@ -6,6 +6,7 @@ window._ = require('lodash')
 let Logger = require('js-logger')
 Logger.useDefaults();
 
+
 window.API_URL = process.env.MIX_API_URL
 window.APP_ENV = window.APP_ENV || process.env.MIX_APP_ENV // Allow to change APP_ENV without rebuild
 let logsEnabled = !!(window.LOGS_ENABLED || process.env.MIX_LOGS_ENABLED || window.APP_ENV !== 'local')
@@ -19,8 +20,8 @@ try {
     window.$ = window.jQuery = require('jquery')
 
     require('bootstrap')
-} catch (e) {}
-
+} catch (e) {
+}
 
 
 Logger.info('APP_ENV', window.APP_ENV)
@@ -31,10 +32,13 @@ Logger.info('APP_ENV', window.APP_ENV)
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 let apiToken = $('meta[name="api-token"]').attr('content')
+
 Logger.debug('token', apiToken)
 
 window.axios = require('axios')
+
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+
 window.axios.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`
 window.axios.defaults.withCredentials = true
 

@@ -103345,39 +103345,41 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/js/app.js":
-/*!*****************************!*\
-  !*** ./resources/js/app.js ***!
-  \*****************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./resources/js/app.tsx":
+/*!******************************!*\
+  !*** ./resources/js/app.tsx ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _src_render_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/render-component */ "./resources/js/src/render-component.js");
-/* harmony import */ var _components_UrlViewer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/UrlViewer */ "./resources/js/components/UrlViewer.js");
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
  * building robust, powerful web applications using React + Laravel.
  */
-
-
-
-
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
+var render_component_1 = __importDefault(__webpack_require__(/*! ./src/render-component */ "./resources/js/src/render-component.tsx"));
+var UrlViewer_1 = __importDefault(__webpack_require__(/*! ./components/UrlViewer */ "./resources/js/components/UrlViewer.tsx"));
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.tsx");
 var appDOM = document.getElementById('app');
-Object(_src_render_component__WEBPACK_IMPORTED_MODULE_1__["default"])(appDOM, 'url-viewer', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_UrlViewer__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+render_component_1.default(appDOM, 'url-viewer', function (element) {
+    var user = JSON.parse(element.dataset.user);
+    return React.createElement(UrlViewer_1.default, { user: user });
+});
+
 
 /***/ }),
 
-/***/ "./resources/js/bootstrap.js":
-/*!***********************************!*\
-  !*** ./resources/js/bootstrap.js ***!
-  \***********************************/
+/***/ "./resources/js/bootstrap.tsx":
+/*!************************************!*\
+  !*** ./resources/js/bootstrap.tsx ***!
+  \************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -103385,38 +103387,32 @@ Object(_src_render_component__WEBPACK_IMPORTED_MODULE_1__["default"])(appDOM, 'u
 /**
  * Logger
  */
-
 var Logger = __webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js");
-
 Logger.useDefaults();
 window.API_URL = "http://url-monitor.public.com";
 window.APP_ENV = window.APP_ENV || "local"; // Allow to change APP_ENV without rebuild
-
 var logsEnabled = !!(window.LOGS_ENABLED || process.env.MIX_LOGS_ENABLED || window.APP_ENV !== 'local');
-
 if (!logsEnabled) {
-  Logger.setLevel(Logger.OFF);
+    Logger.setLevel(Logger.OFF);
 }
-
 try {
-  window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js")["default"];
-  window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-
-  __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
-} catch (e) {}
-
+    window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js").default;
+    window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+    __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
+}
+catch (e) {
+}
 Logger.info('APP_ENV', window.APP_ENV);
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
-
 var apiToken = $('meta[name="api-token"]').attr('content');
 Logger.debug('token', apiToken);
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.headers.common['Authorization'] = "Bearer ".concat(apiToken);
+window.axios.defaults.headers.common['Authorization'] = "Bearer " + apiToken;
 window.axios.defaults.withCredentials = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -103431,400 +103427,423 @@ window.axios.defaults.withCredentials = true;
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
-/***/ "./resources/js/components/UrlStatRow.js":
+/***/ "./resources/js/components/StatusCode.tsx":
+/*!************************************************!*\
+  !*** ./resources/js/components/StatusCode.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+function StatusCode(_a) {
+    var statusCode = _a.statusCode;
+    var msg = statusCode ? statusCode : 'Not Available';
+    return (React.createElement("div", { className: "badge " + getBadgeClass(statusCode) }, msg));
+}
+var getBadgeClass = function (statusCode) {
+    if (statusCode) {
+        switch (statusCode) {
+            case 200:
+                return 'badge-success';
+            default:
+                return 'badge-warning';
+        }
+    }
+    return 'badge-light';
+};
+exports.default = StatusCode;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/UrlStatRow.tsx":
+/*!************************************************!*\
+  !*** ./resources/js/components/UrlStatRow.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var classnames_1 = __importDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+var StatusCode_1 = __importDefault(__webpack_require__(/*! ./StatusCode */ "./resources/js/components/StatusCode.tsx"));
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+function UrlStatRow(_a) {
+    var time = _a.time, loadTime = _a.loadTime, redirects = _a.redirects, statusCode = _a.statusCode;
+    var _b = react_1.useState(false), isHighlight = _b[0], setIsHighlight = _b[1];
+    var enableHighlightCallback = react_1.useCallback(function () {
+        setIsHighlight(true);
+    }, []);
+    var disableHighlightCallback = react_1.useCallback(function () {
+        setIsHighlight(false);
+    }, []);
+    return (React.createElement("tr", { className: classnames_1.default({ 'bg-light': isHighlight }), onMouseEnter: enableHighlightCallback, onMouseLeave: disableHighlightCallback },
+        React.createElement("td", null, time),
+        React.createElement("td", null, loadTime),
+        React.createElement("td", null, redirects),
+        React.createElement("td", null,
+            React.createElement(StatusCode_1.default, { statusCode: statusCode }))));
+}
+exports.default = UrlStatRow;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/UrlStatsModal.tsx":
+/*!***************************************************!*\
+  !*** ./resources/js/components/UrlStatsModal.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+var UrlStatsTable_1 = __importDefault(__webpack_require__(/*! ./UrlStatsTable */ "./resources/js/components/UrlStatsTable.tsx"));
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+function UrlStatsModal(_a) {
+    var urlData = _a.urlData, show = _a.show, onCloseRequest = _a.onCloseRequest;
+    return (React.createElement(React.Fragment, null,
+        React.createElement(react_bootstrap_1.Modal, { show: show, onHide: onCloseRequest, size: 'lg' },
+            React.createElement(react_bootstrap_1.Modal.Header, { closeButton: true },
+                React.createElement(react_bootstrap_1.Modal.Title, null, urlData.url.url)),
+            React.createElement(react_bootstrap_1.Modal.Body, null,
+                React.createElement(UrlStatsTable_1.default, { urlData: urlData })),
+            React.createElement(react_bootstrap_1.Modal.Footer, null,
+                React.createElement(react_bootstrap_1.Button, { variant: "secondary", onClick: onCloseRequest }, "Close")))));
+}
+exports.default = UrlStatsModal;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/UrlStatsTable.tsx":
+/*!***************************************************!*\
+  !*** ./resources/js/components/UrlStatsTable.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var UrlStatRow_1 = __importDefault(__webpack_require__(/*! ./UrlStatRow */ "./resources/js/components/UrlStatRow.tsx"));
+var Logger = __importStar(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
+function UrlStatsTable(_a) {
+    var urlData = _a.urlData;
+    if (urlData.requests.length === 0) {
+        return React.createElement(React.Fragment, null, "No stats");
+    }
+    return (React.createElement(React.Fragment, null,
+        React.createElement("table", { className: 'table' },
+            React.createElement("thead", null,
+                React.createElement("tr", null,
+                    React.createElement("th", null, "Request time"),
+                    React.createElement("th", null, "Total Loading time"),
+                    React.createElement("th", null, "Redirects"),
+                    React.createElement("th", null, "Status"))),
+            React.createElement("tbody", null, urlData.requests.map(function (request) {
+                var key = "request:" + request.id;
+                var timeStr = moment_1.default(request.created_at).fromNow();
+                var loadTime = React.createElement("div", { className: 'badge badge-danger' }, "Timed out");
+                var redirects = React.createElement("div", { className: 'badge badge-danger' }, "Timed out");
+                var status;
+                if (request.stat) {
+                    var stat = request.stat;
+                    Logger.debug('stat', stat);
+                    key = "stat:" + stat.id;
+                    loadTime = React.createElement(React.Fragment, null, parseFloat((stat.total_loading_time).toFixed(3)) + 's');
+                    redirects = React.createElement(React.Fragment, null, parseInt(stat.redirects_count));
+                    status = stat.status;
+                }
+                return (React.createElement(UrlStatRow_1.default, { key: key, time: timeStr, loadTime: loadTime, redirects: redirects, statusCode: status }));
+            })))));
+}
+exports.default = UrlStatsTable;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/UrlViewer.tsx":
 /*!***********************************************!*\
-  !*** ./resources/js/components/UrlStatRow.js ***!
+  !*** ./resources/js/components/UrlViewer.tsx ***!
   \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
+'use stritc';
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-function UrlStatRow(_ref) {
-  var time = _ref.time,
-      loadTime = _ref.loadTime,
-      redirects = _ref.redirects;
-
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      isHighlight = _useState2[0],
-      setIsHighlight = _useState2[1];
-
-  var enableHighlightCallback = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(function () {
-    setIsHighlight(true);
-  }, []);
-  var disableHighlightCallback = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(function () {
-    setIsHighlight(false);
-  }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()({
-      'bg-light': isHighlight
-    }),
-    onMouseEnter: enableHighlightCallback,
-    onMouseLeave: disableHighlightCallback
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, time), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, loadTime), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, redirects));
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (UrlStatRow);
-
-/***/ }),
-
-/***/ "./resources/js/components/UrlStatsModal.js":
-/*!**************************************************!*\
-  !*** ./resources/js/components/UrlStatsModal.js ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-/* harmony import */ var _UrlStatsTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UrlStatsTable */ "./resources/js/components/UrlStatsTable.js");
-
-
-
-
-function UrlStatsModal(_ref) {
-  var urlData = _ref.urlData,
-      show = _ref.show,
-      onCloseRequest = _ref.onCloseRequest;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
-    show: show,
-    onHide: onCloseRequest,
-    size: "lg"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Header, {
-    closeButton: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, urlData.url.url)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UrlStatsTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    urlData: urlData
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-    variant: "secondary",
-    onClick: onCloseRequest
-  }, "Close"))));
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (UrlStatsModal);
-
-/***/ }),
-
-/***/ "./resources/js/components/UrlStatsTable.js":
-/*!**************************************************!*\
-  !*** ./resources/js/components/UrlStatsTable.js ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _UrlStatRow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UrlStatRow */ "./resources/js/components/UrlStatRow.js");
-
-
-
-
-function UrlStatsTable(_ref) {
-  var urlData = _ref.urlData;
-
-  if (urlData.requests.length === 0) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, "No stats");
-  }
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-    className: "table"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Request time"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Total Loading time"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Redirects"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, urlData.requests.map(function (request) {
-    var key = "request:".concat(request.id);
-    var timeStr = moment__WEBPACK_IMPORTED_MODULE_1___default()(request.created_at).fromNow();
-    var loadTime = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "badge badge-danger"
-    }, "Timed out");
-    var redirects = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "badge badge-danger"
-    }, "Timed out");
-
-    if (request.stat) {
-      var stat = request.stat;
-      key = "stat:".concat(stat.id);
-      loadTime = parseFloat(stat.total_loading_time.toFixed(3)) + 's';
-      redirects = parseInt(stat.redirects_count);
-    }
-
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UrlStatRow__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      key: key,
-      time: timeStr,
-      loadTime: loadTime,
-      redirects: redirects
-    });
-  }))));
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (UrlStatsTable);
-
-/***/ }),
-
-/***/ "./resources/js/components/UrlViewer.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/UrlViewer.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _UrlStatsModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UrlStatsModal */ "./resources/js/components/UrlStatsModal.js");
-/* harmony import */ var js_logger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js");
-/* harmony import */ var js_logger__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(js_logger__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _UrlViewerCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UrlViewerCard */ "./resources/js/components/UrlViewerCard.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-
-
-function UrlViewer(_ref) {
-  var user = _ref.user;
-
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      urls = _useState2[0],
-      setUrls = _useState2[1];
-
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
-      _useState4 = _slicedToArray(_useState3, 2),
-      isHighlight = _useState4[0],
-      setIsHighlight = _useState4[1];
-
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      showModal = _useState6[0],
-      setShowModal = _useState6[1];
-
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
-    requests: [],
-    url: {}
-  }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      modalUrlData = _useState8[0],
-      setModalUrlData = _useState8[1];
-
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    var appurl = window.API_URL;
-    js_logger__WEBPACK_IMPORTED_MODULE_2___default.a.debug('appurl', appurl);
-    js_logger__WEBPACK_IMPORTED_MODULE_2___default.a.debug('user', user);
-    axios.get("".concat(appurl, "/api/user/1/urls")).then(function (response) {
-      setUrls(response.data);
-    })["catch"](function (response) {
-      js_logger__WEBPACK_IMPORTED_MODULE_2___default.a.debug('fail', response);
-
-      if (response.response.status === 401) {
-        alert('Unauthorized. Please login again.');
-      }
-    });
-  }, []);
-  var closeModal = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(function () {
-    setShowModal(false);
-  }, []);
-  var viewStats = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(function (url) {
-    var appurl = window.API_URL;
-    axios.get("".concat(appurl, "/api/user/1/bulk-monitor/").concat(url.id)).then(function (response) {
-      js_logger__WEBPACK_IMPORTED_MODULE_2___default.a.info('success', response);
-      setModalUrlData(response.data);
-      setShowModal(true);
-    })["catch"](function (response) {
-      js_logger__WEBPACK_IMPORTED_MODULE_2___default.a.error('fail', response);
-
-      if (response.response.status === 401) {
-        alert('Unauthorized. Please login again.');
-      }
-    });
-  }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: ""
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "mb-5"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Your sites")), urls.map(function (url) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UrlViewerCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      key: url.id,
-      url: url,
-      viewUrlStatsClicked: viewStats
-    });
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UrlStatsModal__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    urlData: modalUrlData,
-    show: showModal,
-    onCloseRequest: closeModal
-  }));
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (UrlViewer);
-
-/***/ }),
-
-/***/ "./resources/js/components/UrlViewerCard.js":
-/*!**************************************************!*\
-  !*** ./resources/js/components/UrlViewerCard.js ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-function UrlViewerCard(_ref) {
-  var url = _ref.url,
-      viewUrlStatsClicked = _ref.viewUrlStatsClicked;
-  var clickCallback = Object(react__WEBPACK_IMPORTED_MODULE_0__["useCallback"])(function () {
-    viewUrlStatsClicked(url);
-  }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, url.url), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "mb-5 row"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-5"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-header"
-  }, "Actions"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-body"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: classnames__WEBPACK_IMPORTED_MODULE_1___default()({
-      'row': true
-    })
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-sm-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "btn btn-primary",
-    onClick: clickCallback
-  }, "View Stats")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-sm-6"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "btn btn-light",
-    href: url.url,
-    target: '_blank'
-  }, "Visit Site")))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-4"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card  text-center"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-header"
-  }, "Average Total Loading Time"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-body"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, getTime(url))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card  text-center"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-header"
-  }, "Average Redirects"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-body"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, getRedirects(url)))))));
-}
-
-var getTime = function getTime(url) {
-  if (url.avg_loading_time === null) {
-    if (url.requests_count > 0) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "badge badge-danger"
-      }, url.requests_count, "+ Timeouts");
-    }
-
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "badge badge-light"
-    }, "Not Available");
-  }
-
-  return parseFloat(url.avg_loading_time.toFixed(3)) + 's';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+var Url_1 = __importDefault(__webpack_require__(/*! ../entities/Url */ "./resources/js/entities/Url.tsx"));
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var UrlStatsModal_1 = __importDefault(__webpack_require__(/*! ./UrlStatsModal */ "./resources/js/components/UrlStatsModal.tsx"));
+var UrlViewerCard_1 = __importDefault(__webpack_require__(/*! ./UrlViewerCard */ "./resources/js/components/UrlViewerCard.tsx"));
+var Logger = __webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js");
+function UrlViewer(_a) {
+    var user = _a.user;
+    var _b = react_1.useState([]), urls = _b[0], setUrls = _b[1];
+    var _c = react_1.useState(false), isHighlight = _c[0], setIsHighlight = _c[1];
+    var _d = react_1.useState(false), showModal = _d[0], setShowModal = _d[1];
+    var _e = react_1.useState({ requests: [], url: {} }), modalUrlData = _e[0], setModalUrlData = _e[1];
+    react_1.useEffect(function () {
+        var appurl = window.API_URL;
+        Logger.debug('appurl', appurl);
+        Logger.debug('user', user);
+        window.axios.get(appurl + "/api/user/" + user.id + "/urls").then(function (response) {
+            var urls = response.data.map(function (data) { return new Url_1.default(data); });
+            setUrls(urls);
+        }).catch(function (response) {
+            Logger.debug('fail', response);
+            if (response.response.status === 401) {
+                alert('Unauthorized. Please login again.');
+            }
+        });
+    }, []);
+    var closeModal = react_1.useCallback(function () {
+        setShowModal(false);
+    }, []);
+    var viewStats = react_1.useCallback(function (url) {
+        var appurl = window.API_URL;
+        window.axios.get(appurl + "/api/user/" + user.id + "/bulk-monitor/" + url.id).then(function (response) {
+            Logger.info('success', response);
+            setModalUrlData(response.data);
+            setShowModal(true);
+        }).catch(function (response) {
+            Logger.error('fail', response);
+            if (response.response.status === 401) {
+                alert('Unauthorized. Please login again.');
+            }
+        });
+    }, []);
+    return (React.createElement(React.Fragment, null,
+        urls.length ? urls.map(function (url) {
+            return (React.createElement(UrlViewerCard_1.default, { key: url.id, url: url, viewUrlStatsClicked: viewStats }));
+        }) : React.createElement("div", { className: 'alert alert-info' }, "Nothing here! You can add a url to monitor using the button above."),
+        React.createElement(UrlStatsModal_1.default, { urlData: modalUrlData, show: showModal, onCloseRequest: closeModal })));
+}
+exports.default = UrlViewer;
 
-var getRedirects = function getRedirects(url) {
-  if (url.avg_redirect_count === null) {
-    if (url.requests_count > 0) {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "badge badge-danger"
-      }, url.requests_count, "+ Timeouts");
-    }
-
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "badge badge-light"
-    }, "Not Available");
-  }
-
-  return parseInt(url.avg_redirect_count);
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (UrlViewerCard);
 
 /***/ }),
 
-/***/ "./resources/js/src/render-component.js":
-/*!**********************************************!*\
-  !*** ./resources/js/src/render-component.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./resources/js/components/UrlViewerCard.tsx":
+/*!***************************************************!*\
+  !*** ./resources/js/components/UrlViewerCard.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
 
-
-function renderComponent(appDOM, tagName, component) {
-  var elements = appDOM.getElementsByTagName(tagName);
-
-  for (var i in elements) {
-    if (elements.hasOwnProperty(i)) {
-      var element = elements[i];
-      react_dom__WEBPACK_IMPORTED_MODULE_0___default.a.render(component, element);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var classnames_1 = __importDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+var StatusCode_1 = __importDefault(__webpack_require__(/*! ./StatusCode */ "./resources/js/components/StatusCode.tsx"));
+var js_logger_1 = __importDefault(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var UrlViewerCard = function (_a) {
+    var url = _a.url, viewUrlStatsClicked = _a.viewUrlStatsClicked;
+    var clickCallback = react_1.useCallback(function () {
+        viewUrlStatsClicked(url);
+    }, []);
+    return (React.createElement(React.Fragment, null,
+        React.createElement("h3", null, url.url),
+        React.createElement("div", { className: "mb-5 row" },
+            React.createElement("div", { className: "col-sm-4" },
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "card-header" }, "Actions"),
+                    React.createElement("div", { className: "card-body" },
+                        React.createElement("div", { className: classnames_1.default({ 'row': true }) },
+                            React.createElement("div", { className: "col-sm-6" },
+                                React.createElement("a", { className: "btn btn-primary", onClick: clickCallback },
+                                    React.createElement("i", { className: "fas fa-eye" }),
+                                    "\u00A0 Stats")),
+                            React.createElement("div", { className: "col-sm-6" },
+                                React.createElement("a", { className: 'btn btn-light', href: url.url, target: '_blank' }, "Visit Site")))))),
+            React.createElement("div", { className: "col-sm-3" },
+                React.createElement("div", { className: "card  text-center" },
+                    React.createElement("div", { className: "card-header" }, "Average TLL"),
+                    React.createElement("div", { className: "card-body" },
+                        React.createElement("h4", null, getTime(url))))),
+            React.createElement("div", { className: "col-sm" },
+                React.createElement("div", { className: "card  text-center" },
+                    React.createElement("div", { className: "card-header" }, "Average Redirects"),
+                    React.createElement("div", { className: "card-body" },
+                        React.createElement("h4", null, getRedirects(url))))),
+            React.createElement("div", { className: "col-sm" },
+                React.createElement("div", { className: "card  text-center" },
+                    React.createElement("div", { className: "card-header" }, "Last Status"),
+                    React.createElement("div", { className: "card-body" },
+                        React.createElement("h4", null,
+                            React.createElement(StatusCode_1.default, { statusCode: url.lastStatus }))))))));
+};
+var getTime = function (url) {
+    if (url.avgLoadingTime === null) {
+        if (url.requestsCount > 0) {
+            return React.createElement("div", { className: 'badge badge-danger' },
+                url.requestsCount,
+                "+ Timeouts");
+        }
+        return React.createElement("div", { className: 'badge badge-light' }, "Not Available");
     }
-  }
-}
+    js_logger_1.default.debug('urll', url);
+    return parseFloat(url.avgLoadingTime.toFixed(3)) + 's';
+};
+var getRedirects = function (url) {
+    if (url.avgRedirectsCount === null) {
+        if (url.requestsCount > 0) {
+            return React.createElement("div", { className: 'badge badge-danger' },
+                url.requestsCount,
+                "+ Timeouts");
+        }
+        return React.createElement("div", { className: 'badge badge-light' }, "Not Available");
+    }
+    return parseInt(url.avgRedirectsCount.toString());
+};
+exports.default = UrlViewerCard;
 
-/* harmony default export */ __webpack_exports__["default"] = (renderComponent);
+
+/***/ }),
+
+/***/ "./resources/js/entities/Url.tsx":
+/*!***************************************!*\
+  !*** ./resources/js/entities/Url.tsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Url = /** @class */ (function () {
+    function Url(urlData) {
+        this._id = urlData.id;
+        this._url = urlData.url;
+        this._avgLoadingTime = urlData.avg_total_loading_time;
+        this._avgRedirectsCount = urlData.avg_redirects_count;
+        this._requestsCount = urlData.requests_count;
+        this._lastStatus = urlData.last_status;
+    }
+    Object.defineProperty(Url.prototype, "url", {
+        get: function () {
+            return this._url;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Url.prototype, "avgLoadingTime", {
+        get: function () {
+            return this._avgLoadingTime;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Url.prototype, "avgRedirectsCount", {
+        get: function () {
+            return this._avgRedirectsCount;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Url.prototype, "requestsCount", {
+        get: function () {
+            return this._requestsCount;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Url.prototype, "lastStatus", {
+        get: function () {
+            return this._lastStatus;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Url.prototype, "id", {
+        get: function () {
+            return this._id;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Url;
+}());
+exports.default = Url;
+
+
+/***/ }),
+
+/***/ "./resources/js/src/render-component.tsx":
+/*!***********************************************!*\
+  !*** ./resources/js/src/render-component.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+function renderComponent(appDOM, tagName, componentCreateCallback) {
+    var elements = appDOM.getElementsByTagName(tagName);
+    for (var i in elements) {
+        if (elements.hasOwnProperty(i)) {
+            var element = elements[i];
+            var component = componentCreateCallback(element);
+            ReactDOM.render(component, element);
+        }
+    }
+}
+exports.default = renderComponent;
+
 
 /***/ }),
 
@@ -103840,13 +103859,13 @@ function renderComponent(appDOM, tagName, component) {
 /***/ }),
 
 /***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
-  \*************************************************************/
+/*!**************************************************************!*\
+  !*** multi ./resources/js/app.tsx ./resources/sass/app.scss ***!
+  \**************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/michal/Development/Sites/url-monitor/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Users/michal/Development/Sites/url-monitor/resources/js/app.tsx */"./resources/js/app.tsx");
 module.exports = __webpack_require__(/*! /Users/michal/Development/Sites/url-monitor/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
