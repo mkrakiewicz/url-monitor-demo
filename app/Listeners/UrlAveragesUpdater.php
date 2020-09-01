@@ -6,8 +6,10 @@ use App\Events\UrlRequest\UrlRequestEvent;
 use App\Events\UrlRequestStatCreated;
 use App\Repositories\UrlRepository;
 use App\Repositories\UrlRequestStatRepository;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Cache;
 
-class UrlAveragesUpdater
+class UrlAveragesUpdater implements ShouldQueue
 {
     /**
      * @var UrlRepository
@@ -37,7 +39,7 @@ class UrlAveragesUpdater
      * @param UrlRequestEvent $event
      * @return void
      */
-    public function handle(UrlRequestEvent $event)
+    public function handle($event)
     {
         $url = $event->getUrlRequest()->url;  //$this->urlRepository->findByUrlRequestStat();
         $minuteLimit = config('url-monitor.index.last-stats-minutes');
@@ -51,5 +53,8 @@ class UrlAveragesUpdater
             ),
             'last_status' => optional($this->urlRequestStatRepository->getLatestStat($url, $minuteLimit))->status
         ]);
+
+        Cache::forget("user-urls:{$url->user->id}");
+        Cache::forget("url-stats-{$url->id}");
     }
 }

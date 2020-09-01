@@ -38,7 +38,7 @@ class UrlRequestStatRepository
     public function getLatestStat(Url $url, int $minuteLimit): ?UrlRequestStat
     {
         /** @var UrlRequestStat|null $model */
-        $model = $this->getRecentQuery($url, $minuteLimit)->first();
+        $model = $this->getRecentQuery($url, $minuteLimit)->latest()->first();
         return $model;
     }
 
@@ -56,13 +56,13 @@ class UrlRequestStatRepository
     /**
      * @param Url $url
      * @param int $minuteLimit
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
     private function getRecentQuery(Url $url, int $minuteLimit)
     {
-        $createdAt = "{$url->stats()->getModel()->getTable()}.{$url->stats()->createdAt()}";
+        $createdAt = "{$url->requests()->getModel()->getTable()}.{$url->requests()->createdAt()}";
         $time = now()->subMinutes($minuteLimit);
-        return $url->allStats()->where($createdAt, '>', $time);
+        return $url->stats()->where($createdAt, '>', $time);
     }
 
 }

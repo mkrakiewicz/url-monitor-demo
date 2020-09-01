@@ -59,3 +59,4 @@ window.axios.defaults.withCredentials = true
 //     forceTLS: true
 // });
 
+console.log('MIX_APP_ENV',process.env.MIX_APP_ENV)

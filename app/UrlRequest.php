@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class UrlRequest extends Model
 {
     protected $fillable = ['status'];
+    protected $with = ['url'];
 
     protected $dispatchesEvents = [
         'created' => UrlRequestCreated::class,

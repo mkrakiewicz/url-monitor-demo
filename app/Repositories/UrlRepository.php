@@ -40,14 +40,16 @@ class UrlRepository
                 return $query->where($requestsCreatedAt, '>', $time);
 
             }
-        ])->addSelect([
-            'last_status' =>
-                UrlRequestStat::select(\DB::raw("{$user->stats()->getModel()->getTable()}.status"))
-                    ->where($statsCreatedAt, '>', $time)
-                    ->where(UrlRequestStat::getModel()->getTable() . '.url_id', '=', DB::raw('urls.id'))
-                    ->orderBy($statsCreatedAt, 'desc')
-                    ->limit(1)
-        ])->get();
+        ])
+//            ->addSelect([
+//            'last_status' =>
+//                UrlRequestStat::select(\DB::raw("{$user->stats()->getModel()->getTable()}.status"))
+//                    ->where($statsCreatedAt, '>', $time)
+//                    ->where(UrlRequestStat::getModel()->getTable() . '.url_id', '=', DB::raw('urls.id'))
+//                    ->orderBy($statsCreatedAt, 'desc')
+//                    ->limit(1)
+//        ])
+            ->get();
 
 //        $results = DB::select(DB::raw("select
 //  urls.*,

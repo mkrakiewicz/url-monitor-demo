@@ -6,19 +6,19 @@ use App\UrlRequest;
 
 abstract class UrlRequestEvent
 {
+
     /**
      * @var UrlRequest
      */
-    private $urlRequest;
+    protected $urlRequest; // Must be protected to serialize
 
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param UrlRequest $urlRequest
      */
     public function __construct(UrlRequest $urlRequest)
     {
-        //
         $this->urlRequest = $urlRequest;
     }
 
@@ -29,15 +29,4 @@ abstract class UrlRequestEvent
     {
         return $this->urlRequest;
     }
-//
-//
-//    /**
-//     * Get the channels the event should broadcast on.
-//     *
-//     * @return \Illuminate\Broadcasting\Channel|array
-//     */
-//    public function broadcastOn()
-//    {
-//        return new PrivateChannel('channel-name');
-//    }
 }

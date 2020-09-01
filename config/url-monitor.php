@@ -5,7 +5,7 @@ return [
         'max-redirects' => 250,
     ],
     'jobs' => [
-        'chunk-url-count' => 35,
+        'chunk-url-count' => 100,
         'stat-timeout' => 15
     ],
     'store' => [
