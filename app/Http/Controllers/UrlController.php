@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UrlRepository;
 use App\User;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Http\Request;
 
 class UrlController extends Controller
 {
@@ -41,6 +38,10 @@ class UrlController extends Controller
 //        ])->get(['urls.id'])->dd();
 
 //        \DB::getQueryLog()
-        return $urlRepository->getLatestForUserWithAverages($user, config('url-monitor.index.last-stats-minutes'));
+        return \Cache::remember("user-urls:{$user->id}",
+            \DateInterval::createFromDateString("1 minute"), function () use ($urlRepository, $user) {
+                $minuteLimit = config('url-monitor.index.last-stats-minutes');
+                return $urlRepository->getLatestForUserWithAverages($user, $minuteLimit);
+            });
     }
 }

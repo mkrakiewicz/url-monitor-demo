@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\UrlRequestCreated;
+use App\Events\UrlRequest\UrlRequestCreated;
 use App\Events\UrlRequestStatCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;

@@ -29,11 +29,11 @@ class LandingPageController extends Controller
     public function index(UrlRepository $urlRepository)
     {
         $stats = Cache::remember('landing-stats', \DateInterval::createFromDateString('10 minutes'), function () {
-            $oldestRequest = UrlRequest::oldest()->first();
+            $oldestUrl = Url::oldest()->first();
             return [
                 'urls' => Url::count(),
                 'requests' => UrlRequest::count(),
-                'since' => $oldestRequest ? $oldestRequest->created_at : now()
+                'since' => $oldestUrl ? $oldestUrl->created_at : now()
             ];
         });
         return view('welcome', ['stats' => $stats]);

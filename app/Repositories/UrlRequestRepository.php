@@ -58,6 +58,6 @@ class UrlRequestRepository
     {
         $createdAt = "{$url->requests()->getModel()->getTable()}.{$url->requests()->createdAt()}";
         $time = now()->subMinutes($minuteLimit);
-        return $url->requests()->with('stat')->where($createdAt, '>', $time)->get();
+        return $url->requests()->with('stat')->where($createdAt, '>', $time)->latest()->get();
     }
 }

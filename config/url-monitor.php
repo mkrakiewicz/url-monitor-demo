@@ -13,7 +13,7 @@ return [
         'stat-timeout' => 2.0
     ],
     'index' => [
-        'last-stats-minutes' => 1000
+        'last-stats-minutes' => 10
     ],
-    'old-stats-minutes' => 100
+    'old-stats-minutes' => 10
 ];

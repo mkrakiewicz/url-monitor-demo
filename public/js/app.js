@@ -103366,11 +103366,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var render_component_1 = __importDefault(__webpack_require__(/*! ./src/render-component */ "./resources/js/src/render-component.tsx"));
 var UrlViewer_1 = __importDefault(__webpack_require__(/*! ./components/UrlViewer */ "./resources/js/components/UrlViewer.tsx"));
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var UrlMonitorAddButton_1 = __importDefault(__webpack_require__(/*! ./components/UrlMonitorAddButton */ "./resources/js/components/UrlMonitorAddButton.tsx"));
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.tsx");
 var appDOM = document.getElementById('app');
 render_component_1.default(appDOM, 'url-viewer', function (element) {
     var user = JSON.parse(element.dataset.user);
     return React.createElement(UrlViewer_1.default, { user: user });
+});
+render_component_1.default(appDOM, 'url-add-button', function (element) {
+    var user = JSON.parse(element.dataset.user);
+    return React.createElement(UrlMonitorAddButton_1.default, { user: user });
 });
 
 
@@ -103390,7 +103395,7 @@ render_component_1.default(appDOM, 'url-viewer', function (element) {
 var Logger = __webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js");
 Logger.useDefaults();
 window.API_URL = "http://url-monitor.public.com";
-window.APP_ENV = window.APP_ENV || "local"; // Allow to change APP_ENV without rebuild
+window.APP_ENV = window.APP_ENV || "production"; // Allow to change APP_ENV without rebuild
 var logsEnabled = !!(window.LOGS_ENABLED || process.env.MIX_LOGS_ENABLED || window.APP_ENV !== 'local');
 if (!logsEnabled) {
     Logger.setLevel(Logger.OFF);
@@ -103464,6 +103469,142 @@ exports.default = StatusCode;
 
 /***/ }),
 
+/***/ "./resources/js/components/UrlAddModalInputRow.tsx":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/UrlAddModalInputRow.tsx ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+function UrlStatsAddModalInput(_a) {
+    var index = _a.index, value = _a.value, onChange = _a.onChange;
+    var handleChange = react_1.useCallback(function (event) {
+        onChange(event, index);
+    }, [index, value]);
+    return (React.createElement("input", { type: 'text', value: value, onChange: handleChange }));
+}
+exports.default = UrlStatsAddModalInput;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/UrlMonitorAddButton.tsx":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/UrlMonitorAddButton.tsx ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var UrlStatsAddModal_1 = __importStar(__webpack_require__(/*! ./UrlStatsAddModal */ "./resources/js/components/UrlStatsAddModal.tsx"));
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+var js_logger_1 = __importDefault(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var getEmpty = function () { return new UrlStatsAddModal_1.UrlInput(Math.random(), 'bla'); };
+var getEmptyMap = function () {
+    var map = new Map();
+    var empty = getEmpty();
+    map.set(empty.index, empty);
+    return map;
+};
+var initialState = { inputs: getEmptyMap() };
+function reducer(state, action) {
+    switch (action.type) {
+        case 'add':
+            var empty = getEmpty();
+            state.inputs.set(empty.index, empty);
+            return { inputs: state.inputs };
+        case 'update':
+            var index = action.index;
+            var item = state.inputs.get(index);
+            item.value = action.value;
+            state.inputs.set(index, item);
+            return { inputs: state.inputs };
+        case 'reset':
+            return { inputs: getEmptyMap() };
+        default:
+            throw new Error();
+    }
+}
+function UrlMonitorAddButton(_a) {
+    var user = _a.user;
+    var _b = react_1.useState(false), showModal = _b[0], setShowModal = _b[1];
+    var _c = react_1.useReducer(reducer, initialState), state = _c[0], dispatch = _c[1];
+    var onSubmit = react_1.useCallback(function (inputs) {
+        var appurl = window.API_URL;
+        js_logger_1.default.debug('appurl', appurl);
+        js_logger_1.default.debug('user', user);
+        var items = Array.from(state.inputs.keys()).map(function (key) { return state.inputs.get(key).value; });
+        window.axios.post(appurl + "/api/user/" + user.id + "/bulk-monitor", { items: items })
+            .then(function (response) {
+            alert('ok');
+        }).catch(function (response) {
+            js_logger_1.default.debug('fail', response);
+            if (response.response.status === 401) {
+                alert('Unauthorized. Please login again.');
+            }
+        });
+        setShowModal(false);
+        // window.location.reload()
+    }, []);
+    var onChange = react_1.useCallback(function (event, index) {
+        dispatch({ type: 'update', index: index, value: event.target.value });
+        // inputs[index].value = event.target.value
+        // setInputs(inputs)
+    }, []);
+    var onAdd = function () {
+        js_logger_1.default.debug('clicked');
+        // let newInputs = inputs;
+        // let index = newInputs.push()
+        dispatch({ type: 'add' });
+        js_logger_1.default.debug('inputs', state.inputs);
+    };
+    var onButtonClicked = react_1.useCallback(function () {
+        setShowModal(true);
+    }, []);
+    var closeModal = react_1.useCallback(function () {
+        setShowModal(false);
+        dispatch({ type: 'reset' });
+    }, []);
+    return (React.createElement(React.Fragment, null,
+        React.createElement(react_bootstrap_1.Button, { type: 'primary', onClick: onButtonClicked }, "Add"),
+        React.createElement(UrlStatsAddModal_1.default, { onSubmit: onSubmit, show: showModal, onCloseRequest: closeModal, inputs: state.inputs, onAdd: onAdd, onChange: onChange })));
+}
+exports.default = UrlMonitorAddButton;
+
+
+/***/ }),
+
 /***/ "./resources/js/components/UrlStatRow.tsx":
 /*!************************************************!*\
   !*** ./resources/js/components/UrlStatRow.tsx ***!
@@ -103498,6 +103639,64 @@ function UrlStatRow(_a) {
             React.createElement(StatusCode_1.default, { statusCode: statusCode }))));
 }
 exports.default = UrlStatRow;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/UrlStatsAddModal.tsx":
+/*!******************************************************!*\
+  !*** ./resources/js/components/UrlStatsAddModal.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UrlInput = void 0;
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+var UrlAddModalInputRow_1 = __importDefault(__webpack_require__(/*! ./UrlAddModalInputRow */ "./resources/js/components/UrlAddModalInputRow.tsx"));
+var js_logger_1 = __importDefault(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var UrlInput = /** @class */ (function () {
+    function UrlInput(index, value) {
+        this._index = index;
+        this.value = value;
+    }
+    Object.defineProperty(UrlInput.prototype, "index", {
+        get: function () {
+            return this._index;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return UrlInput;
+}());
+exports.UrlInput = UrlInput;
+function UrlStatsAddModal(_a) {
+    var inputs = _a.inputs, show = _a.show, onAdd = _a.onAdd, onChange = _a.onChange, onSubmit = _a.onSubmit, onCloseRequest = _a.onCloseRequest;
+    js_logger_1.default.debug('inputtts', inputs);
+    // let keys = inputs.keys().valueOf()
+    return (React.createElement(React.Fragment, null,
+        React.createElement(react_bootstrap_1.Modal, { show: show, onHide: onCloseRequest, size: 'lg' },
+            React.createElement(react_bootstrap_1.Modal.Header, { closeButton: true },
+                React.createElement(react_bootstrap_1.Modal.Title, null, "Add Urls To Monitor")),
+            React.createElement(react_bootstrap_1.Modal.Body, null,
+                React.createElement("p", null, "You can add several at once."),
+                React.createElement("ul", null, Array.from(inputs.keys()).map(function (key) {
+                    var input = inputs.get(key);
+                    return (React.createElement("li", { key: input.index },
+                        React.createElement(UrlAddModalInputRow_1.default, { value: input.value, index: input.index, onChange: onChange })));
+                })),
+                React.createElement("button", { className: "btn primary", onClick: onAdd }, " +")),
+            React.createElement(react_bootstrap_1.Modal.Footer, null,
+                React.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: onSubmit }, "Add"),
+                React.createElement(react_bootstrap_1.Button, { variant: "secondary", onClick: onCloseRequest }, "Cancel")))));
+}
+exports.default = UrlStatsAddModal;
 
 
 /***/ }),

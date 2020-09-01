@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\UrlRequest\UrlRequestEvent;
 use App\Events\UrlRequestStatCreated;
 use App\Repositories\UrlRepository;
 use App\Repositories\UrlRequestStatRepository;
@@ -33,12 +34,12 @@ class UrlAveragesUpdater
     /**
      * Handle the event.
      *
-     * @param UrlRequestStatCreated $event
+     * @param UrlRequestEvent $event
      * @return void
      */
-    public function handle(UrlRequestStatCreated $event)
+    public function handle(UrlRequestEvent $event)
     {
-        $url = $this->urlRepository->findByUrlRequestStat($event->getUrlRequestStat());
+        $url = $event->getUrlRequest()->url;  //$this->urlRepository->findByUrlRequestStat();
         $minuteLimit = config('url-monitor.index.last-stats-minutes');
         $time = now()->subMinutes($minuteLimit);
         $url->update([

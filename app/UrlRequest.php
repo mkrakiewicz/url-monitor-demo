@@ -2,7 +2,8 @@
 
 namespace App;
 
-use App\Events\UrlRequestCreated;
+use App\Events\UrlRequest\UrlRequestCreated;
+use App\Events\UrlRequest\UrlRequestUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class UrlRequest extends Model
@@ -10,7 +11,8 @@ class UrlRequest extends Model
     protected $fillable = ['status'];
 
     protected $dispatchesEvents = [
-        'created' => UrlRequestCreated::class
+        'created' => UrlRequestCreated::class,
+        'updated' => UrlRequestUpdated::class
     ];
 
     public function stat()

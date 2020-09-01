@@ -54,6 +54,7 @@ class MonitorController extends Controller
         if ($isRequestingStats = (boolean)$request->get('stats', false)) {
             $stats = $this->fetcherService->getBulkStats($urlsToAdd, config('url-monitor.store.stat-timeout'));
             $transformed = $statsTransformer->transform($stats, ...$urlsToAdd);
+            Cache::forget("user-urls:{$user->id}");
             return response('', 200, [config('url-monitor.store.stats-header-name') => Json::encode($transformed)]);
         }
     }

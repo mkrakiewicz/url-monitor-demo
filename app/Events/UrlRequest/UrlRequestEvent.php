@@ -1,19 +1,11 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\UrlRequest;
 
 use App\UrlRequest;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
-class UrlRequestCreated
+abstract class UrlRequestEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
     /**
      * @var UrlRequest
      */

@@ -7,6 +7,7 @@ import renderComponent from './src/render-component'
 import UrlViewer from './components/UrlViewer'
 const React = require("react");
 import {AxiosInstance} from "axios";
+import UrlMonitorAddButton from "./components/UrlMonitorAddButton";
 
 declare global {
     interface Window {
@@ -28,4 +29,10 @@ let appDOM = document.getElementById('app')
 renderComponent(appDOM, 'url-viewer', (element) => {
     let user = JSON.parse(element.dataset.user)
     return <UrlViewer user={user}/>
+})
+
+
+renderComponent(appDOM, 'url-add-button', (element) => {
+    let user = JSON.parse(element.dataset.user)
+    return <UrlMonitorAddButton user={user}/>
 })
