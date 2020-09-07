@@ -5,15 +5,12 @@ namespace App\Jobs;
 use App\Services\Stats\Bulk\BulkHttpStatsFetcherService;
 use App\Services\Stats\Bulk\BulkStatsPersistenceService;
 use App\Url;
-use App\UrlRequest;
-use App\UrlRequestStat;
-use App\UrlStat;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class GetStatsForUrls implements ShouldQueue
@@ -32,7 +29,7 @@ class GetStatsForUrls implements ShouldQueue
      * @param iterable $urls
      * @param int $statTimeout
      */
-    public function __construct(iterable $urls, int $statTimeout)
+    public function __construct(Collection $urls, int $statTimeout)
     {
         $this->urls = collect($urls);
         $this->statTimeout = $statTimeout;

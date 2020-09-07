@@ -26,6 +26,7 @@ class StatCreatorServiceTest extends TestCase
         $counter->addTime($url, 5.4);
         $counter->addRedirects($url, 1);
         $counter->setCompleted($url);
+        $counter->setStatus($url, 200);
         $urlStatsContainer = $this->service->collectStats(['bad.com', $url], $counter);
         $urlStat = $urlStatsContainer->getStats($url);
 

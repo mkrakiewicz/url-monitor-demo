@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\MonitorController;
+use App\Http\Controllers\Api\UrlController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => '/user/{user}', 'as' => 'user.'], function () {
-    Route::apiResource('urls', 'UrlController');
+    Route::apiResource('urls', UrlController::class);
 
-    Route::post('bulk-monitor', 'MonitorController@store');
-//    Route::get('bulk-monitors/{url:url}', 'MonitorController@index')->where('url', '.*');
-    Route::get('bulk-monitor/{url}', 'MonitorController@index');
+    Route::apiResource('bulk-monitor', MonitorController::class)->only([
+        'store',
+        'show'
+    ])->parameters(['bulk-monitor' => 'url']);
 });

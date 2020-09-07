@@ -24,6 +24,11 @@ mix.ts('resources/js/app.tsx', 'public/js')
             ]
         },
         resolve: {
-            extensions: ["*", ".js", ".jsx", ".vue", ".ts", ".tsx"]
+            extensions: ["*", ".js", ".jsx", ".vue", ".ts", ".tsx"],
+            modules: [
+                path.resolve('./node_modules'),
+                path.resolve('./resources/js')
+            ]
+
         }
     });

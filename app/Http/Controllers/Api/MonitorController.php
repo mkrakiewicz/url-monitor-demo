@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AddMonitorsRequest;
+use App\Jobs\GetStatsForUrls;
 use App\Repositories\UrlRequestRepository;
-use App\Repositories\UrlRequestStatRepository;
 use App\Services\BulkUrlPersistenceService;
 use App\Services\Stats\Bulk\BulkHttpStatsFetcherService;
 use App\Transformers\StatCollectionTransformer;
@@ -13,7 +14,6 @@ use App\User;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Psy\Util\Json;
 
 class MonitorController extends Controller
 {
@@ -46,30 +46,31 @@ class MonitorController extends Controller
      * @return ResponseFactory|Response
      * @throws \Throwable
      */
-    public function store(User $user, AddMonitorsRequest $request, StatCollectionTransformer $statsTransformer)
+    public function store(User $user, AddMonitorsRequest $request)
     {
         $urlsToAdd = (array)$request->get('items', []);
-        $this->bulkUrlPersistenceService->saveMany($user, $urlsToAdd);
+        $urlsCreated = $this->bulkUrlPersistenceService->saveMany($user, $urlsToAdd);
 
-        if ($isRequestingStats = (boolean)$request->get('stats', false)) {
-            $stats = $this->fetcherService->getBulkStats($urlsToAdd, config('url-monitor.store.stat-timeout'));
-            $transformed = $statsTransformer->transform($stats, ...$urlsToAdd);
-            return response('', 200, [config('url-monitor.store.stats-header-name') => Json::encode($transformed)]);
-        }
+        $this->dispatchNow(new GetStatsForUrls($urlsCreated, config('url-monitor.store.stat-timeout')));
+
+        return response([
+            'urlsAddedCount' => $urlsCreated->count(),
+            'urlsAddedIds' => [$urlsCreated->pluck('id')->values()]
+        ]);
     }
 
     /**
+     * @param User $user
      * @param Url $url
      * @return array
      */
-    public function index(User $user, Url $url)
+    public function show(User $user, Url $url)
     {
         $stats = Cache::remember(
-            "url-stats-{$url->id}",
+            $url->getStatsCacheKey(),
             \DateInterval::createFromDateString('1 minute'),
-            function () use ($url) {
-                return $this->urlRequestStatRepository->getRecentWithStats(
-                    $url,
+            function () use ($user, $url) {
+                return $this->urlRequestStatRepository->getRecentForUrl($url,
                     config('url-monitor.index.last-stats-minutes')
                 );
             });

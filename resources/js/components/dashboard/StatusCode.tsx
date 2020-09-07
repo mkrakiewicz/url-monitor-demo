@@ -1,4 +1,4 @@
-const React = require('react')
+import React from 'react';
 
 function StatusCode ({ statusCode }) {
     let msg = statusCode ? statusCode : 'Not Available'

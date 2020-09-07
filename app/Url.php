@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Url extends Model
 {
@@ -28,8 +29,14 @@ class Url extends Model
         return $this->hasMany(UrlRequestStat::class);
     }
 
-    public function user()
+
+    public function users(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
+    }
+
+    public function getStatsCacheKey(): string
+    {
+        return "url-stats-{$this->id}";
     }
 }

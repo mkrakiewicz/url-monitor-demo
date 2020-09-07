@@ -1,9 +1,7 @@
 import {Button, Modal} from 'react-bootstrap'
-import UrlStatsAddModalInput from "./UrlAddModalInputRow";
+import UrlStatsAddModalInput from "components/dashboard/UrlAddModalInputRow";
 import Logger from "js-logger";
-
-const React = require('react')
-
+import React from 'react';
 
 export class UrlInput {
     public value;

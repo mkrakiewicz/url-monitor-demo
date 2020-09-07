@@ -48,17 +48,22 @@ class User extends Authenticatable
 
     public function urls()
     {
-        return $this->hasMany(Url::class);
+        return $this->belongsToMany(Url::class);
     }
 
     public function requests()
     {
-        return $this->hasManyThrough(UrlRequest::class, Url::class);
+        return $this->hasManyDeep(UrlRequest::class, ['url_user', Url::class]);
     }
 
     public function stats()
     {
 //        return $this->hasManyDeep(UrlRequestStat::class, [Url::class, UrlRequest::class]);
         return $this->hasManyDeep(UrlRequestStat::class, [Url::class, UrlRequest::class]);
+    }
+
+    public function getUrlsCacheKey()
+    {
+        return "user-urls:{$this->id}";
     }
 }

@@ -1,10 +1,10 @@
-import Url from "../entities/Url";
 import {useCallback} from 'react'
 import classNames from 'classnames'
-import StatusCode from './StatusCode'
 import Logger from "js-logger";
+import Url from "entities/Url";
+import StatusCode from 'components/dashboard/StatusCode'
 
-const React = require('react')
+import React from 'react';
 
 type PropTypes = {
     url: Url,

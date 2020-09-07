@@ -15,7 +15,7 @@ class CreateUrlsTable extends Migration
     {
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+//            $table->unsignedBigInteger('user_id');
             $table->string('url');
             $table->float('avg_total_loading_time')->nullable();
             $table->float('avg_redirects_count')->nullable();
@@ -24,7 +24,7 @@ class CreateUrlsTable extends Migration
             $table->timestamps();
 
             $table->index(['url']);
-            $table->index(['user_id']);
+//            $table->index(['user_id']);
 //            $table->foreign('user_id')->references('id')->on('users');
         });
     }

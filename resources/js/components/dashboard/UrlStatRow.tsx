@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import StatusCode from './StatusCode'
 import {useCallback, useState} from "react";
-const React = require('react')
+import React from 'react';
 
 function UrlStatRow ({ time, loadTime, redirects, statusCode }) {
     const [isHighlight, setIsHighlight] = useState(false)

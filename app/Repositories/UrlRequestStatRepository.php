@@ -6,7 +6,6 @@ use App\Structs\UrlStat;
 use App\Url;
 use App\UrlRequest;
 use App\UrlRequestStat;
-use Illuminate\Database\Eloquent\Collection;
 
 class UrlRequestStatRepository
 {
@@ -25,7 +24,6 @@ class UrlRequestStatRepository
             'status' => $stats->getStatus()
         ]);
         $statModel->url()->associate($url);
-//        $statModel->user()->associate($url->user);
         $statModel->save();
         return $statModel;
     }

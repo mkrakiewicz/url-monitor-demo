@@ -13,7 +13,6 @@ class UrlSeeder extends Seeder
      */
     public function run()
     {
-        factory(Url::class, 200)->state('demo')->create();
 
         $user = User::where(['email' => 'user@test.com'])->firstOrFail();
         collect([
@@ -21,9 +20,14 @@ class UrlSeeder extends Seeder
             ['url' => 'http://socialmention.com'],
             ['url' => 'https://google.com'],
         ])->each(function (array $urlArr) use ($user) {
-            $url = factory(Url::class)->state('demo')->make($urlArr);
-            $url->user()->associate($user);
-            $url->save();
+            /** @var Url $url */
+            $url = factory(Url::class)->state('demo')->create($urlArr);
+            $url->users()->attach($user);
+        });
+
+        $urlIds = factory(Url::class, 200)->state('demo')->create()->pluck('id');
+        User::limit(50)->each(function (User $user) use ($urlIds) {
+            $user->urls()->attach($urlIds->random(10));
         });
     }
 }

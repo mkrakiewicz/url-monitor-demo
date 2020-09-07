@@ -1,4 +1,4 @@
-import ReactDOM = require("react-dom");
+import ReactDOM from 'react-dom'
 
 function renderComponent(appDOM: HTMLElement, tagName: string, componentCreateCallback) {
     let elements = appDOM.getElementsByTagName(tagName)

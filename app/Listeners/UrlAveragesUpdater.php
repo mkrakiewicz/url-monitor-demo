@@ -3,13 +3,13 @@
 namespace App\Listeners;
 
 use App\Events\UrlRequest\UrlRequestEvent;
-use App\Events\UrlRequestStatCreated;
 use App\Repositories\UrlRepository;
 use App\Repositories\UrlRequestStatRepository;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Url;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
-class UrlAveragesUpdater implements ShouldQueue
+class UrlAveragesUpdater
 {
     /**
      * @var UrlRepository
@@ -41,10 +41,12 @@ class UrlAveragesUpdater implements ShouldQueue
      */
     public function handle($event)
     {
-        $url = $event->getUrlRequest()->url;  //$this->urlRepository->findByUrlRequestStat();
+        $urlRequest = $event->getUrlRequest();
+        $url = $urlRequest->url;  //$this->urlRepository->findByUrlRequestStat();
+
         $minuteLimit = config('url-monitor.index.last-stats-minutes');
-        $time = now()->subMinutes($minuteLimit);
-        $url->update([
+
+        $averages = [
             'avg_total_loading_time' => $this->urlRequestStatRepository->getRecentStatsAvg(
                 $url, 'total_loading_time', $minuteLimit
             ),
@@ -52,9 +54,25 @@ class UrlAveragesUpdater implements ShouldQueue
                 $url, 'redirects_count', $minuteLimit
             ),
             'last_status' => optional($this->urlRequestStatRepository->getLatestStat($url, $minuteLimit))->status
-        ]);
+        ];
 
-        Cache::forget("user-urls:{$url->user->id}");
-        Cache::forget("url-stats-{$url->id}");
+        Log::info('Updating averages url', ['url' => $url, 'averages' => $averages]);
+
+        $url->update($averages);
+
+        $this->clearCache($url);
+    }
+
+    /**
+     * @param Url $url
+     */
+    private function clearCache(Url $url): void
+    {
+        Log::info('Clearing cache for url', [$url]);
+
+        Cache::forget($url->getStatsCacheKey());
+        foreach ($url->users as $user) {
+            Cache::forget($user->getUrlsCacheKey());
+        }
     }
 }

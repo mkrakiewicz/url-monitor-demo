@@ -1,8 +1,7 @@
-import UrlStatRow from './UrlStatRow'
+import React from 'react'
 import * as Logger from 'js-logger'
-import StatusCode from './StatusCode'
-const React = require('react')
 import moment from "moment";
+import UrlStatRow from 'components/dashboard/UrlStatRow'
 
 function UrlStatsTable({urlData}) {
     if (urlData.requests.length === 0) {

@@ -1,12 +1,7 @@
-'use strict';
-import {useCallback, useReducer, useState} from 'react'
-import UrlStatsAddModal, {UrlInput} from "./UrlStatsAddModal";
+import React, {useCallback, useReducer, useState} from 'react'
+import UrlStatsAddModal, {UrlInput} from "components/dashboard/UrlStatsAddModal";
 import {Button} from "react-bootstrap";
 import Logger from "js-logger";
-import IUrlResponse from "../responses/IUrlResponse";
-import Url from "../entities/Url";
-
-const React = require('react')
 
 
 let getEmpty = () => new UrlInput(Math.random(), 'bla')
@@ -40,7 +35,7 @@ function reducer(state, action) {
 
 function UrlMonitorAddButton({user}) {
 
-    const [showModal, setShowModal] = useState(false)
+    const [showAddModal, setShowAddModal] = useState(false)
     const [state, dispatch] = useReducer(reducer, initialState);
 
     let onSubmit = useCallback((inputs: Array<UrlInput>) => {
@@ -58,7 +53,7 @@ function UrlMonitorAddButton({user}) {
                 alert('Unauthorized. Please login again.')
             }
         })
-        setShowModal(false)
+        setShowAddModal(false)
         // window.location.reload()
     }, [])
 
@@ -80,11 +75,11 @@ function UrlMonitorAddButton({user}) {
     }
 
     let onButtonClicked = useCallback(() => {
-        setShowModal(true)
+        setShowAddModal(true)
     }, [])
 
     let closeModal = useCallback(() => {
-        setShowModal(false)
+        setShowAddModal(false)
         dispatch({type: 'reset'})
 
     }, [])
@@ -93,7 +88,7 @@ function UrlMonitorAddButton({user}) {
 
         <>
             <Button type='primary' onClick={onButtonClicked}>Add</Button>
-            <UrlStatsAddModal onSubmit={onSubmit} show={showModal} onCloseRequest={closeModal} inputs={state.inputs}
+            <UrlStatsAddModal onSubmit={onSubmit} show={showAddModal} onCloseRequest={closeModal} inputs={state.inputs}
                               onAdd={onAdd} onChange={onChange}/>
         </>
     )

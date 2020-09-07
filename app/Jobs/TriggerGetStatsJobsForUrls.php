@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Url;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -37,29 +36,13 @@ class TriggerGetStatsJobsForUrls implements ShouldQueue
     {
         Log::info("Concurrent request / chunk count: {$this->concurrentUrlRequests}");
 
-        Url::chunk($this->concurrentUrlRequests, $this->chunkCallback());
-    }
+        Url::chunk($this->concurrentUrlRequests, function (Collection $urls) {
 
-    /**
-     * @param Collection $urls
-     * @return GetStatsForUrls
-     * @throws BindingResolutionException
-     */
-    private function createJobFromContainer(Collection $urls): GetStatsForUrls
-    {
-        return app()->make(GetStatsForUrls::class, ['urls' => $urls]);
-    }
-
-    /**
-     * @return \Closure
-     */
-    private function chunkCallback(): \Closure
-    {
-        return function (Collection $urls) {
-
-            dispatch($this->createJobFromContainer($urls));
+            dispatch(
+                app()->make(GetStatsForUrls::class, ['urls' => $urls])
+            );
 
             Log::info("Dispatched job for {$urls->count()} urls");
-        };
+        });
     }
 }

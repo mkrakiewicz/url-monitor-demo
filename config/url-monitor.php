@@ -9,7 +9,6 @@ return [
         'stat-timeout' => 15
     ],
     'store' => [
-        'stats-header-name' => 'X-Stats',
         'stat-timeout' => 2.0
     ],
     'index' => [

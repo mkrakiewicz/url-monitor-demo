@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 use App\Url;
 use App\UrlRequest;
+use App\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class UrlRequestRepository
@@ -54,10 +56,10 @@ class UrlRequestRepository
      * @param int $minuteLimit
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getRecentWithStats(Url $url, int $minuteLimit): Collection
+    public function getRecentForUrl(Url $url, int $minuteLimit): Collection
     {
         $createdAt = "{$url->requests()->getModel()->getTable()}.{$url->requests()->createdAt()}";
         $time = now()->subMinutes($minuteLimit);
-        return $url->requests()->with('stat')->where($createdAt, '>', $time)->latest()->get();
+        return $url->requests()->with('stat')->where($createdAt, '>', $time)->get();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\UrlRequest\UrlRequestCreated;
 use App\Events\UrlRequest\UrlRequestUpdated;
+use App\Events\UrlRequestStatCreated;
 use App\Listeners\UrlAveragesUpdater;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,12 +24,9 @@ class EventServiceProvider extends ServiceProvider
         UrlRequestCreated::class => [
             UrlAveragesUpdater::class
         ],
-        UrlRequestUpdated::class => [
+        UrlRequestStatCreated::class => [
             UrlAveragesUpdater::class
-        ],
-//        UrlRequestCreated::class => [
-//            UrlAveragesUpdater::class
-//        ]
+        ]
     ];
 
     /**

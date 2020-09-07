@@ -1,6 +1,6 @@
 import {useCallback} from "react";
 
-const React = require('react')
+import React from 'react';
 
 
 function UrlStatsAddModalInput({index, value, onChange}) {

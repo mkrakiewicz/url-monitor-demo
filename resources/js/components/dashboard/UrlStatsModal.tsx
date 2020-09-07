@@ -1,8 +1,8 @@
-import { Button, Modal } from 'react-bootstrap'
-import UrlStatsTable from './UrlStatsTable'
-const React = require('react')
+import React from 'react'
+import {Button, Modal} from 'react-bootstrap'
+import UrlStatsTable from 'components/dashboard/UrlStatsTable'
 
-function UrlStatsModal ({ urlData, show, onCloseRequest }) {
+function UrlStatsModal({urlData, show, onCloseRequest}) {
     return (
         <>
             <Modal show={show} onHide={onCloseRequest} size='lg'>

@@ -3,11 +3,11 @@
  * includes React and other helpers. It's a great starting point while
  * building robust, powerful web applications using React + Laravel.
  */
-import renderComponent from './src/render-component'
-import UrlViewer from './components/UrlViewer'
-const React = require("react");
 import {AxiosInstance} from "axios";
-import UrlMonitorAddButton from "./components/UrlMonitorAddButton";
+import renderComponent from 'utilities/render-component'
+import Dashboard from "components/Dashboard";
+
+const React = require("react");
 
 declare global {
     interface Window {
@@ -26,13 +26,13 @@ require('./bootstrap')
 
 let appDOM = document.getElementById('app')
 
-renderComponent(appDOM, 'url-viewer', (element) => {
+renderComponent(appDOM, 'Dashboard', (element) => {
     let user = JSON.parse(element.dataset.user)
-    return <UrlViewer user={user}/>
+    return <Dashboard user={user}/>
 })
 
-
-renderComponent(appDOM, 'url-add-button', (element) => {
-    let user = JSON.parse(element.dataset.user)
-    return <UrlMonitorAddButton user={user}/>
-})
+//
+// renderComponent(appDOM, 'url-add-button', (element) => {
+//     let user = JSON.parse(element.dataset.user)
+//     return <UrlMonitorAddButton user={user}/>
+// })

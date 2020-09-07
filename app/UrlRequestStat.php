@@ -13,13 +13,13 @@ class UrlRequestStat extends Model
         'status'
     ];
 
-//    protected $dispatchesEvents = [
-//        'created' => UrlRequestStatCreated::class
-//    ];
+    protected $dispatchesEvents = [
+        'created' => UrlRequestStatCreated::class
+    ];
 
     public function request()
     {
-        return $this->belongsTo(UrlRequestStat::class);
+        return $this->belongsTo(UrlRequest::class);
     }
 
     public function url()

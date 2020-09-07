@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\UrlRepository;
-use App\User;
-use Illuminate\Http\Request;
-
 class HomeController extends Controller
 {
     /**
@@ -23,7 +19,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(UrlRepository $urlRepository)
+    public function index()
     {
         return view('home');
     }

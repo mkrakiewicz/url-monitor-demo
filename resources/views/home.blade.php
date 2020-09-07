@@ -22,10 +22,9 @@
                         <div class="alert alert-info">
                            <i class="fas fa-info"></i>&nbsp; Showing stats for last <span class=" ary">{{ config('url-monitor.index.last-stats-minutes') }} minutes </span>
                         </div>
-                        <url-add-button data-user='@json($user)'></url-add-button>
                     </div>
                 </div>
-                <url-viewer data-user='@json($user)'></url-viewer>
+                <Dashboard data-user='@json($user)'></Dashboard>
             </div>
         </div>
     </div>

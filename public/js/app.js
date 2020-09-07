@@ -103358,25 +103358,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes React and other helpers. It's a great starting point while
- * building robust, powerful web applications using React + Laravel.
- */
-var render_component_1 = __importDefault(__webpack_require__(/*! ./src/render-component */ "./resources/js/src/render-component.tsx"));
-var UrlViewer_1 = __importDefault(__webpack_require__(/*! ./components/UrlViewer */ "./resources/js/components/UrlViewer.tsx"));
+var render_component_1 = __importDefault(__webpack_require__(/*! utilities/render-component */ "./resources/js/utilities/render-component.tsx"));
+var Dashboard_1 = __importDefault(__webpack_require__(/*! components/Dashboard */ "./resources/js/components/Dashboard.tsx"));
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var UrlMonitorAddButton_1 = __importDefault(__webpack_require__(/*! ./components/UrlMonitorAddButton */ "./resources/js/components/UrlMonitorAddButton.tsx"));
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.tsx");
 var appDOM = document.getElementById('app');
-render_component_1.default(appDOM, 'url-viewer', function (element) {
+render_component_1.default(appDOM, 'Dashboard', function (element) {
     var user = JSON.parse(element.dataset.user);
-    return React.createElement(UrlViewer_1.default, { user: user });
+    return React.createElement(Dashboard_1.default, { user: user });
 });
-render_component_1.default(appDOM, 'url-add-button', function (element) {
-    var user = JSON.parse(element.dataset.user);
-    return React.createElement(UrlMonitorAddButton_1.default, { user: user });
-});
+//
+// renderComponent(appDOM, 'url-add-button', (element) => {
+//     let user = JSON.parse(element.dataset.user)
+//     return <UrlMonitorAddButton user={user}/>
+// })
 
 
 /***/ }),
@@ -103395,7 +103390,7 @@ render_component_1.default(appDOM, 'url-add-button', function (element) {
 var Logger = __webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js");
 Logger.useDefaults();
 window.API_URL = "http://url-monitor.public.com";
-window.APP_ENV = window.APP_ENV || "production"; // Allow to change APP_ENV without rebuild
+window.APP_ENV = window.APP_ENV || "local"; // Allow to change APP_ENV without rebuild
 var logsEnabled = !!(window.LOGS_ENABLED || process.env.MIX_LOGS_ENABLED || window.APP_ENV !== 'local');
 if (!logsEnabled) {
     Logger.setLevel(Logger.OFF);
@@ -103432,72 +103427,16 @@ window.axios.defaults.withCredentials = true;
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
-console.log('MIX_APP_ENV', "production");
+console.log('MIX_APP_ENV', "local");
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
-/***/ "./resources/js/components/StatusCode.tsx":
-/*!************************************************!*\
-  !*** ./resources/js/components/StatusCode.tsx ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-function StatusCode(_a) {
-    var statusCode = _a.statusCode;
-    var msg = statusCode ? statusCode : 'Not Available';
-    return (React.createElement("div", { className: "badge " + getBadgeClass(statusCode) }, msg));
-}
-var getBadgeClass = function (statusCode) {
-    if (statusCode) {
-        switch (statusCode) {
-            case 200:
-                return 'badge-success';
-            default:
-                return 'badge-warning';
-        }
-    }
-    return 'badge-light';
-};
-exports.default = StatusCode;
-
-
-/***/ }),
-
-/***/ "./resources/js/components/UrlAddModalInputRow.tsx":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/UrlAddModalInputRow.tsx ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-function UrlStatsAddModalInput(_a) {
-    var index = _a.index, value = _a.value, onChange = _a.onChange;
-    var handleChange = react_1.useCallback(function (event) {
-        onChange(event, index);
-    }, [index, value]);
-    return (React.createElement("input", { type: 'text', value: value, onChange: handleChange }));
-}
-exports.default = UrlStatsAddModalInput;
-
-
-/***/ }),
-
-/***/ "./resources/js/components/UrlMonitorAddButton.tsx":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/UrlMonitorAddButton.tsx ***!
-  \*********************************************************/
+/***/ "./resources/js/components/Dashboard.tsx":
+/*!***********************************************!*\
+  !*** ./resources/js/components/Dashboard.tsx ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -103526,11 +103465,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var UrlStatsAddModal_1 = __importStar(__webpack_require__(/*! ./UrlStatsAddModal */ "./resources/js/components/UrlStatsAddModal.tsx"));
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var Url_1 = __importDefault(__webpack_require__(/*! entities/Url */ "./resources/js/entities/Url.tsx"));
+var UrlStatsModal_1 = __importDefault(__webpack_require__(/*! components/dashboard/UrlStatsModal */ "./resources/js/components/dashboard/UrlStatsModal.tsx"));
+var UrlViewerCard_1 = __importDefault(__webpack_require__(/*! components/dashboard/UrlViewerCard */ "./resources/js/components/dashboard/UrlViewerCard.tsx"));
+var UrlStatsAddModal_1 = __importStar(__webpack_require__(/*! components/dashboard/UrlStatsAddModal */ "./resources/js/components/dashboard/UrlStatsAddModal.tsx"));
 var js_logger_1 = __importDefault(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 var getEmpty = function () { return new UrlStatsAddModal_1.UrlInput(Math.random(), 'bla'); };
 var getEmptyMap = function () {
     var map = new Map();
@@ -103557,10 +103498,25 @@ function reducer(state, action) {
             throw new Error();
     }
 }
-function UrlMonitorAddButton(_a) {
+var refreshUrlList = function (appurl, user, setUrls) {
+    return window.axios.get(appurl + "/api/user/" + user.id + "/urls").then(function (response) {
+        var urls = response.data.map(function (data) { return new Url_1.default(data); });
+        setUrls(urls);
+    }).catch(function (response) {
+        js_logger_1.default.debug('fail', response);
+        if (response.response.status === 401) {
+            alert('Unauthorized. Please login again.');
+        }
+    });
+};
+function Dashboard(_a) {
     var user = _a.user;
-    var _b = react_1.useState(false), showModal = _b[0], setShowModal = _b[1];
-    var _c = react_1.useReducer(reducer, initialState), state = _c[0], dispatch = _c[1];
+    var _b = react_1.useState([]), urls = _b[0], setUrls = _b[1];
+    var _c = react_1.useState(false), isHighlight = _c[0], setIsHighlight = _c[1];
+    var _d = react_1.useState(false), showModal = _d[0], setShowModal = _d[1];
+    var _e = react_1.useState({ requests: [], url: {} }), modalUrlData = _e[0], setModalUrlData = _e[1];
+    var _f = react_1.useState(false), showAddModal = _f[0], setShowAddModal = _f[1];
+    var _g = react_1.useReducer(reducer, initialState), state = _g[0], dispatch = _g[1];
     var onSubmit = react_1.useCallback(function (inputs) {
         var appurl = window.API_URL;
         js_logger_1.default.debug('appurl', appurl);
@@ -103574,8 +103530,10 @@ function UrlMonitorAddButton(_a) {
             if (response.response.status === 401) {
                 alert('Unauthorized. Please login again.');
             }
+        }).then(function () {
+            refreshUrlList(appurl, user, setUrls);
         });
-        setShowModal(false);
+        setShowAddModal(false);
         // window.location.reload()
     }, []);
     var onChange = react_1.useCallback(function (event, index) {
@@ -103591,25 +103549,113 @@ function UrlMonitorAddButton(_a) {
         js_logger_1.default.debug('inputs', state.inputs);
     };
     var onButtonClicked = react_1.useCallback(function () {
-        setShowModal(true);
+        setShowAddModal(true);
+    }, []);
+    var closeAddModal = react_1.useCallback(function () {
+        setShowAddModal(false);
+        dispatch({ type: 'reset' });
+    }, []);
+    react_1.useEffect(function () {
+        var appurl = window.API_URL;
+        js_logger_1.default.debug('appurl', appurl);
+        js_logger_1.default.debug('user', user);
+        refreshUrlList(appurl, user, setUrls);
     }, []);
     var closeModal = react_1.useCallback(function () {
         setShowModal(false);
-        dispatch({ type: 'reset' });
     }, []);
-    return (React.createElement(React.Fragment, null,
-        React.createElement(react_bootstrap_1.Button, { type: 'primary', onClick: onButtonClicked }, "Add"),
-        React.createElement(UrlStatsAddModal_1.default, { onSubmit: onSubmit, show: showModal, onCloseRequest: closeModal, inputs: state.inputs, onAdd: onAdd, onChange: onChange })));
+    var viewStats = react_1.useCallback(function (url) {
+        var appurl = window.API_URL;
+        window.axios.get(appurl + "/api/user/" + user.id + "/bulk-monitor/" + url.id).then(function (response) {
+            js_logger_1.default.info('success', response);
+            setModalUrlData(response.data);
+            setShowModal(true);
+        }).catch(function (response) {
+            js_logger_1.default.error('fail', response);
+            if (response.response.status === 401) {
+                alert('Unauthorized. Please login again.');
+            }
+        });
+    }, []);
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement(react_bootstrap_1.Button, { type: 'primary', onClick: onButtonClicked }, "Add"),
+        react_1.default.createElement(UrlStatsAddModal_1.default, { onSubmit: onSubmit, show: showAddModal, onCloseRequest: closeModal, inputs: state.inputs, onAdd: onAdd, onChange: onChange }),
+        urls.length ? urls.map(function (url) {
+            return (react_1.default.createElement(UrlViewerCard_1.default, { key: url.id, url: url, viewUrlStatsClicked: viewStats }));
+        }) : react_1.default.createElement("div", { className: 'alert alert-info' }, "Nothing here! You can add a url to monitor using the button above."),
+        react_1.default.createElement(UrlStatsModal_1.default, { urlData: modalUrlData, show: showModal, onCloseRequest: closeModal })));
 }
-exports.default = UrlMonitorAddButton;
+exports.default = Dashboard;
 
 
 /***/ }),
 
-/***/ "./resources/js/components/UrlStatRow.tsx":
-/*!************************************************!*\
-  !*** ./resources/js/components/UrlStatRow.tsx ***!
-  \************************************************/
+/***/ "./resources/js/components/dashboard/StatusCode.tsx":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/dashboard/StatusCode.tsx ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+function StatusCode(_a) {
+    var statusCode = _a.statusCode;
+    var msg = statusCode ? statusCode : 'Not Available';
+    return (react_1.default.createElement("div", { className: "badge " + getBadgeClass(statusCode) }, msg));
+}
+var getBadgeClass = function (statusCode) {
+    if (statusCode) {
+        switch (statusCode) {
+            case 200:
+                return 'badge-success';
+            default:
+                return 'badge-warning';
+        }
+    }
+    return 'badge-light';
+};
+exports.default = StatusCode;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/dashboard/UrlAddModalInputRow.tsx":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/dashboard/UrlAddModalInputRow.tsx ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_2 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+function UrlStatsAddModalInput(_a) {
+    var index = _a.index, value = _a.value, onChange = _a.onChange;
+    var handleChange = react_1.useCallback(function (event) {
+        onChange(event, index);
+    }, [index, value]);
+    return (react_2.default.createElement("input", { type: 'text', value: value, onChange: handleChange }));
+}
+exports.default = UrlStatsAddModalInput;
+
+
+/***/ }),
+
+/***/ "./resources/js/components/dashboard/UrlStatRow.tsx":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/dashboard/UrlStatRow.tsx ***!
+  \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -103620,9 +103666,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var classnames_1 = __importDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
-var StatusCode_1 = __importDefault(__webpack_require__(/*! ./StatusCode */ "./resources/js/components/StatusCode.tsx"));
+var StatusCode_1 = __importDefault(__webpack_require__(/*! ./StatusCode */ "./resources/js/components/dashboard/StatusCode.tsx"));
 var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_2 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 function UrlStatRow(_a) {
     var time = _a.time, loadTime = _a.loadTime, redirects = _a.redirects, statusCode = _a.statusCode;
     var _b = react_1.useState(false), isHighlight = _b[0], setIsHighlight = _b[1];
@@ -103632,22 +103678,22 @@ function UrlStatRow(_a) {
     var disableHighlightCallback = react_1.useCallback(function () {
         setIsHighlight(false);
     }, []);
-    return (React.createElement("tr", { className: classnames_1.default({ 'bg-light': isHighlight }), onMouseEnter: enableHighlightCallback, onMouseLeave: disableHighlightCallback },
-        React.createElement("td", null, time),
-        React.createElement("td", null, loadTime),
-        React.createElement("td", null, redirects),
-        React.createElement("td", null,
-            React.createElement(StatusCode_1.default, { statusCode: statusCode }))));
+    return (react_2.default.createElement("tr", { className: classnames_1.default({ 'bg-light': isHighlight }), onMouseEnter: enableHighlightCallback, onMouseLeave: disableHighlightCallback },
+        react_2.default.createElement("td", null, time),
+        react_2.default.createElement("td", null, loadTime),
+        react_2.default.createElement("td", null, redirects),
+        react_2.default.createElement("td", null,
+            react_2.default.createElement(StatusCode_1.default, { statusCode: statusCode }))));
 }
 exports.default = UrlStatRow;
 
 
 /***/ }),
 
-/***/ "./resources/js/components/UrlStatsAddModal.tsx":
-/*!******************************************************!*\
-  !*** ./resources/js/components/UrlStatsAddModal.tsx ***!
-  \******************************************************/
+/***/ "./resources/js/components/dashboard/UrlStatsAddModal.tsx":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/dashboard/UrlStatsAddModal.tsx ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -103659,9 +103705,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UrlInput = void 0;
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-var UrlAddModalInputRow_1 = __importDefault(__webpack_require__(/*! ./UrlAddModalInputRow */ "./resources/js/components/UrlAddModalInputRow.tsx"));
+var UrlAddModalInputRow_1 = __importDefault(__webpack_require__(/*! components/dashboard/UrlAddModalInputRow */ "./resources/js/components/dashboard/UrlAddModalInputRow.tsx"));
 var js_logger_1 = __importDefault(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var UrlInput = /** @class */ (function () {
     function UrlInput(index, value) {
         this._index = index;
@@ -103681,31 +103727,31 @@ function UrlStatsAddModal(_a) {
     var inputs = _a.inputs, show = _a.show, onAdd = _a.onAdd, onChange = _a.onChange, onSubmit = _a.onSubmit, onCloseRequest = _a.onCloseRequest;
     js_logger_1.default.debug('inputtts', inputs);
     // let keys = inputs.keys().valueOf()
-    return (React.createElement(React.Fragment, null,
-        React.createElement(react_bootstrap_1.Modal, { show: show, onHide: onCloseRequest, size: 'lg' },
-            React.createElement(react_bootstrap_1.Modal.Header, { closeButton: true },
-                React.createElement(react_bootstrap_1.Modal.Title, null, "Add Urls To Monitor")),
-            React.createElement(react_bootstrap_1.Modal.Body, null,
-                React.createElement("p", null, "You can add several at once."),
-                React.createElement("ul", null, Array.from(inputs.keys()).map(function (key) {
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement(react_bootstrap_1.Modal, { show: show, onHide: onCloseRequest, size: 'lg' },
+            react_1.default.createElement(react_bootstrap_1.Modal.Header, { closeButton: true },
+                react_1.default.createElement(react_bootstrap_1.Modal.Title, null, "Add Urls To Monitor")),
+            react_1.default.createElement(react_bootstrap_1.Modal.Body, null,
+                react_1.default.createElement("p", null, "You can add several at once."),
+                react_1.default.createElement("ul", null, Array.from(inputs.keys()).map(function (key) {
                     var input = inputs.get(key);
-                    return (React.createElement("li", { key: input.index },
-                        React.createElement(UrlAddModalInputRow_1.default, { value: input.value, index: input.index, onChange: onChange })));
+                    return (react_1.default.createElement("li", { key: input.index },
+                        react_1.default.createElement(UrlAddModalInputRow_1.default, { value: input.value, index: input.index, onChange: onChange })));
                 })),
-                React.createElement("button", { className: "btn primary", onClick: onAdd }, " +")),
-            React.createElement(react_bootstrap_1.Modal.Footer, null,
-                React.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: onSubmit }, "Add"),
-                React.createElement(react_bootstrap_1.Button, { variant: "secondary", onClick: onCloseRequest }, "Cancel")))));
+                react_1.default.createElement("button", { className: "btn primary", onClick: onAdd }, " +")),
+            react_1.default.createElement(react_bootstrap_1.Modal.Footer, null,
+                react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: onSubmit }, "Add"),
+                react_1.default.createElement(react_bootstrap_1.Button, { variant: "secondary", onClick: onCloseRequest }, "Cancel")))));
 }
 exports.default = UrlStatsAddModal;
 
 
 /***/ }),
 
-/***/ "./resources/js/components/UrlStatsModal.tsx":
-/*!***************************************************!*\
-  !*** ./resources/js/components/UrlStatsModal.tsx ***!
-  \***************************************************/
+/***/ "./resources/js/components/dashboard/UrlStatsModal.tsx":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/dashboard/UrlStatsModal.tsx ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -103715,29 +103761,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-var UrlStatsTable_1 = __importDefault(__webpack_require__(/*! ./UrlStatsTable */ "./resources/js/components/UrlStatsTable.tsx"));
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var UrlStatsTable_1 = __importDefault(__webpack_require__(/*! components/dashboard/UrlStatsTable */ "./resources/js/components/dashboard/UrlStatsTable.tsx"));
 function UrlStatsModal(_a) {
     var urlData = _a.urlData, show = _a.show, onCloseRequest = _a.onCloseRequest;
-    return (React.createElement(React.Fragment, null,
-        React.createElement(react_bootstrap_1.Modal, { show: show, onHide: onCloseRequest, size: 'lg' },
-            React.createElement(react_bootstrap_1.Modal.Header, { closeButton: true },
-                React.createElement(react_bootstrap_1.Modal.Title, null, urlData.url.url)),
-            React.createElement(react_bootstrap_1.Modal.Body, null,
-                React.createElement(UrlStatsTable_1.default, { urlData: urlData })),
-            React.createElement(react_bootstrap_1.Modal.Footer, null,
-                React.createElement(react_bootstrap_1.Button, { variant: "secondary", onClick: onCloseRequest }, "Close")))));
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement(react_bootstrap_1.Modal, { show: show, onHide: onCloseRequest, size: 'lg' },
+            react_1.default.createElement(react_bootstrap_1.Modal.Header, { closeButton: true },
+                react_1.default.createElement(react_bootstrap_1.Modal.Title, null, urlData.url.url)),
+            react_1.default.createElement(react_bootstrap_1.Modal.Body, null,
+                react_1.default.createElement(UrlStatsTable_1.default, { urlData: urlData })),
+            react_1.default.createElement(react_bootstrap_1.Modal.Footer, null,
+                react_1.default.createElement(react_bootstrap_1.Button, { variant: "secondary", onClick: onCloseRequest }, "Close")))));
 }
 exports.default = UrlStatsModal;
 
 
 /***/ }),
 
-/***/ "./resources/js/components/UrlStatsTable.tsx":
-/*!***************************************************!*\
-  !*** ./resources/js/components/UrlStatsTable.tsx ***!
-  \***************************************************/
+/***/ "./resources/js/components/dashboard/UrlStatsTable.tsx":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/dashboard/UrlStatsTable.tsx ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -103766,38 +103812,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var UrlStatRow_1 = __importDefault(__webpack_require__(/*! ./UrlStatRow */ "./resources/js/components/UrlStatRow.tsx"));
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var Logger = __importStar(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var moment_1 = __importDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
+var UrlStatRow_1 = __importDefault(__webpack_require__(/*! components/dashboard/UrlStatRow */ "./resources/js/components/dashboard/UrlStatRow.tsx"));
 function UrlStatsTable(_a) {
     var urlData = _a.urlData;
     if (urlData.requests.length === 0) {
-        return React.createElement(React.Fragment, null, "No stats");
+        return react_1.default.createElement(react_1.default.Fragment, null, "No stats");
     }
-    return (React.createElement(React.Fragment, null,
-        React.createElement("table", { className: 'table' },
-            React.createElement("thead", null,
-                React.createElement("tr", null,
-                    React.createElement("th", null, "Request time"),
-                    React.createElement("th", null, "Total Loading time"),
-                    React.createElement("th", null, "Redirects"),
-                    React.createElement("th", null, "Status"))),
-            React.createElement("tbody", null, urlData.requests.map(function (request) {
+    return (react_1.default.createElement(react_1.default.Fragment, null,
+        react_1.default.createElement("table", { className: 'table' },
+            react_1.default.createElement("thead", null,
+                react_1.default.createElement("tr", null,
+                    react_1.default.createElement("th", null, "Request time"),
+                    react_1.default.createElement("th", null, "Total Loading time"),
+                    react_1.default.createElement("th", null, "Redirects"),
+                    react_1.default.createElement("th", null, "Status"))),
+            react_1.default.createElement("tbody", null, urlData.requests.map(function (request) {
                 var key = "request:" + request.id;
                 var timeStr = moment_1.default(request.created_at).fromNow();
-                var loadTime = React.createElement("div", { className: 'badge badge-danger' }, "Timed out");
-                var redirects = React.createElement("div", { className: 'badge badge-danger' }, "Timed out");
+                var loadTime = react_1.default.createElement("div", { className: 'badge badge-danger' }, "Timed out");
+                var redirects = react_1.default.createElement("div", { className: 'badge badge-danger' }, "Timed out");
                 var status;
                 if (request.stat) {
                     var stat = request.stat;
                     Logger.debug('stat', stat);
                     key = "stat:" + stat.id;
-                    loadTime = React.createElement(React.Fragment, null, parseFloat((stat.total_loading_time).toFixed(3)) + 's');
-                    redirects = React.createElement(React.Fragment, null, parseInt(stat.redirects_count));
+                    loadTime = react_1.default.createElement(react_1.default.Fragment, null, parseFloat((stat.total_loading_time).toFixed(3)) + 's');
+                    redirects = react_1.default.createElement(react_1.default.Fragment, null, parseInt(stat.redirects_count));
                     status = stat.status;
                 }
-                return (React.createElement(UrlStatRow_1.default, { key: key, time: timeStr, loadTime: loadTime, redirects: redirects, statusCode: status }));
+                return (react_1.default.createElement(UrlStatRow_1.default, { key: key, time: timeStr, loadTime: loadTime, redirects: redirects, statusCode: status }));
             })))));
 }
 exports.default = UrlStatsTable;
@@ -103805,76 +103851,10 @@ exports.default = UrlStatsTable;
 
 /***/ }),
 
-/***/ "./resources/js/components/UrlViewer.tsx":
-/*!***********************************************!*\
-  !*** ./resources/js/components/UrlViewer.tsx ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-'use stritc';
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var Url_1 = __importDefault(__webpack_require__(/*! ../entities/Url */ "./resources/js/entities/Url.tsx"));
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var UrlStatsModal_1 = __importDefault(__webpack_require__(/*! ./UrlStatsModal */ "./resources/js/components/UrlStatsModal.tsx"));
-var UrlViewerCard_1 = __importDefault(__webpack_require__(/*! ./UrlViewerCard */ "./resources/js/components/UrlViewerCard.tsx"));
-var Logger = __webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js");
-function UrlViewer(_a) {
-    var user = _a.user;
-    var _b = react_1.useState([]), urls = _b[0], setUrls = _b[1];
-    var _c = react_1.useState(false), isHighlight = _c[0], setIsHighlight = _c[1];
-    var _d = react_1.useState(false), showModal = _d[0], setShowModal = _d[1];
-    var _e = react_1.useState({ requests: [], url: {} }), modalUrlData = _e[0], setModalUrlData = _e[1];
-    react_1.useEffect(function () {
-        var appurl = window.API_URL;
-        Logger.debug('appurl', appurl);
-        Logger.debug('user', user);
-        window.axios.get(appurl + "/api/user/" + user.id + "/urls").then(function (response) {
-            var urls = response.data.map(function (data) { return new Url_1.default(data); });
-            setUrls(urls);
-        }).catch(function (response) {
-            Logger.debug('fail', response);
-            if (response.response.status === 401) {
-                alert('Unauthorized. Please login again.');
-            }
-        });
-    }, []);
-    var closeModal = react_1.useCallback(function () {
-        setShowModal(false);
-    }, []);
-    var viewStats = react_1.useCallback(function (url) {
-        var appurl = window.API_URL;
-        window.axios.get(appurl + "/api/user/" + user.id + "/bulk-monitor/" + url.id).then(function (response) {
-            Logger.info('success', response);
-            setModalUrlData(response.data);
-            setShowModal(true);
-        }).catch(function (response) {
-            Logger.error('fail', response);
-            if (response.response.status === 401) {
-                alert('Unauthorized. Please login again.');
-            }
-        });
-    }, []);
-    return (React.createElement(React.Fragment, null,
-        urls.length ? urls.map(function (url) {
-            return (React.createElement(UrlViewerCard_1.default, { key: url.id, url: url, viewUrlStatsClicked: viewStats }));
-        }) : React.createElement("div", { className: 'alert alert-info' }, "Nothing here! You can add a url to monitor using the button above."),
-        React.createElement(UrlStatsModal_1.default, { urlData: modalUrlData, show: showModal, onCloseRequest: closeModal })));
-}
-exports.default = UrlViewer;
-
-
-/***/ }),
-
-/***/ "./resources/js/components/UrlViewerCard.tsx":
-/*!***************************************************!*\
-  !*** ./resources/js/components/UrlViewerCard.tsx ***!
-  \***************************************************/
+/***/ "./resources/js/components/dashboard/UrlViewerCard.tsx":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/dashboard/UrlViewerCard.tsx ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -103886,53 +103866,53 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var classnames_1 = __importDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
-var StatusCode_1 = __importDefault(__webpack_require__(/*! ./StatusCode */ "./resources/js/components/StatusCode.tsx"));
 var js_logger_1 = __importDefault(__webpack_require__(/*! js-logger */ "./node_modules/js-logger/src/logger.js"));
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var StatusCode_1 = __importDefault(__webpack_require__(/*! components/dashboard/StatusCode */ "./resources/js/components/dashboard/StatusCode.tsx"));
+var react_2 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var UrlViewerCard = function (_a) {
     var url = _a.url, viewUrlStatsClicked = _a.viewUrlStatsClicked;
     var clickCallback = react_1.useCallback(function () {
         viewUrlStatsClicked(url);
     }, []);
-    return (React.createElement(React.Fragment, null,
-        React.createElement("h3", null, url.url),
-        React.createElement("div", { className: "mb-5 row" },
-            React.createElement("div", { className: "col-sm-4" },
-                React.createElement("div", { className: "card" },
-                    React.createElement("div", { className: "card-header" }, "Actions"),
-                    React.createElement("div", { className: "card-body" },
-                        React.createElement("div", { className: classnames_1.default({ 'row': true }) },
-                            React.createElement("div", { className: "col-sm-6" },
-                                React.createElement("a", { className: "btn btn-primary", onClick: clickCallback },
-                                    React.createElement("i", { className: "fas fa-eye" }),
+    return (react_2.default.createElement(react_2.default.Fragment, null,
+        react_2.default.createElement("h3", null, url.url),
+        react_2.default.createElement("div", { className: "mb-5 row" },
+            react_2.default.createElement("div", { className: "col-sm-4" },
+                react_2.default.createElement("div", { className: "card" },
+                    react_2.default.createElement("div", { className: "card-header" }, "Actions"),
+                    react_2.default.createElement("div", { className: "card-body" },
+                        react_2.default.createElement("div", { className: classnames_1.default({ 'row': true }) },
+                            react_2.default.createElement("div", { className: "col-sm-6" },
+                                react_2.default.createElement("a", { className: "btn btn-primary", onClick: clickCallback },
+                                    react_2.default.createElement("i", { className: "fas fa-eye" }),
                                     "\u00A0 Stats")),
-                            React.createElement("div", { className: "col-sm-6" },
-                                React.createElement("a", { className: 'btn btn-light', href: url.url, target: '_blank' }, "Visit Site")))))),
-            React.createElement("div", { className: "col-sm-3" },
-                React.createElement("div", { className: "card  text-center" },
-                    React.createElement("div", { className: "card-header" }, "Average TLL"),
-                    React.createElement("div", { className: "card-body" },
-                        React.createElement("h4", null, getTime(url))))),
-            React.createElement("div", { className: "col-sm" },
-                React.createElement("div", { className: "card  text-center" },
-                    React.createElement("div", { className: "card-header" }, "Average Redirects"),
-                    React.createElement("div", { className: "card-body" },
-                        React.createElement("h4", null, getRedirects(url))))),
-            React.createElement("div", { className: "col-sm" },
-                React.createElement("div", { className: "card  text-center" },
-                    React.createElement("div", { className: "card-header" }, "Last Status"),
-                    React.createElement("div", { className: "card-body" },
-                        React.createElement("h4", null,
-                            React.createElement(StatusCode_1.default, { statusCode: url.lastStatus }))))))));
+                            react_2.default.createElement("div", { className: "col-sm-6" },
+                                react_2.default.createElement("a", { className: 'btn btn-light', href: url.url, target: '_blank' }, "Visit Site")))))),
+            react_2.default.createElement("div", { className: "col-sm-3" },
+                react_2.default.createElement("div", { className: "card  text-center" },
+                    react_2.default.createElement("div", { className: "card-header" }, "Average TLL"),
+                    react_2.default.createElement("div", { className: "card-body" },
+                        react_2.default.createElement("h4", null, getTime(url))))),
+            react_2.default.createElement("div", { className: "col-sm" },
+                react_2.default.createElement("div", { className: "card  text-center" },
+                    react_2.default.createElement("div", { className: "card-header" }, "Average Redirects"),
+                    react_2.default.createElement("div", { className: "card-body" },
+                        react_2.default.createElement("h4", null, getRedirects(url))))),
+            react_2.default.createElement("div", { className: "col-sm" },
+                react_2.default.createElement("div", { className: "card  text-center" },
+                    react_2.default.createElement("div", { className: "card-header" }, "Last Status"),
+                    react_2.default.createElement("div", { className: "card-body" },
+                        react_2.default.createElement("h4", null,
+                            react_2.default.createElement(StatusCode_1.default, { statusCode: url.lastStatus }))))))));
 };
 var getTime = function (url) {
     if (url.avgLoadingTime === null) {
         if (url.requestsCount > 0) {
-            return React.createElement("div", { className: 'badge badge-danger' },
+            return react_2.default.createElement("div", { className: 'badge badge-danger' },
                 url.requestsCount,
                 "+ Timeouts");
         }
-        return React.createElement("div", { className: 'badge badge-light' }, "Not Available");
+        return react_2.default.createElement("div", { className: 'badge badge-light' }, "Not Available");
     }
     js_logger_1.default.debug('urll', url);
     return parseFloat(url.avgLoadingTime.toFixed(3)) + 's';
@@ -103940,11 +103920,11 @@ var getTime = function (url) {
 var getRedirects = function (url) {
     if (url.avgRedirectsCount === null) {
         if (url.requestsCount > 0) {
-            return React.createElement("div", { className: 'badge badge-danger' },
+            return react_2.default.createElement("div", { className: 'badge badge-danger' },
                 url.requestsCount,
                 "+ Timeouts");
         }
-        return React.createElement("div", { className: 'badge badge-light' }, "Not Available");
+        return react_2.default.createElement("div", { className: 'badge badge-light' }, "Not Available");
     }
     return parseInt(url.avgRedirectsCount.toString());
 };
@@ -104021,24 +104001,27 @@ exports.default = Url;
 
 /***/ }),
 
-/***/ "./resources/js/src/render-component.tsx":
-/*!***********************************************!*\
-  !*** ./resources/js/src/render-component.tsx ***!
-  \***********************************************/
+/***/ "./resources/js/utilities/render-component.tsx":
+/*!*****************************************************!*\
+  !*** ./resources/js/utilities/render-component.tsx ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
 function renderComponent(appDOM, tagName, componentCreateCallback) {
     var elements = appDOM.getElementsByTagName(tagName);
     for (var i in elements) {
         if (elements.hasOwnProperty(i)) {
             var element = elements[i];
             var component = componentCreateCallback(element);
-            ReactDOM.render(component, element);
+            react_dom_1.default.render(component, element);
         }
     }
 }
