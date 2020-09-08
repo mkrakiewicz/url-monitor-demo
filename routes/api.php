@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\MonitorController;
 use App\Http\Controllers\Api\UrlController;
+use App\Http\Controllers\Api\UrlEventStreamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +23,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => '/user/{user}', 'as' =
         'store',
         'show'
     ])->parameters(['bulk-monitor' => 'url']);
+
 });
+
+Route::get('user/{user}/requests/watch', [UrlEventStreamController::class, 'streamLastRequest']);

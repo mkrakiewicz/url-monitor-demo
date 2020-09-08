@@ -1,5 +1,5 @@
 import {Button, Modal} from 'react-bootstrap'
-import UrlStatsAddModalInput from "components/dashboard/UrlAddModalInputRow";
+import UrlStatsAddModalInput from "components/dashboard/modals/UrlAddModalInputRow";
 import Logger from "js-logger";
 import React from 'react';
 

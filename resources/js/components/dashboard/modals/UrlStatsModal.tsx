@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, Modal} from 'react-bootstrap'
-import UrlStatsTable from 'components/dashboard/UrlStatsTable'
+import UrlStatsTable from 'components/dashboard/modals/UrlStatsTable'
 
 function UrlStatsModal({urlData, show, onCloseRequest}) {
     return (

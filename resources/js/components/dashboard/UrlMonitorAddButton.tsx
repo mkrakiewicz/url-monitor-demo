@@ -1,7 +1,7 @@
 import React, {useCallback, useReducer, useState} from 'react'
-import UrlStatsAddModal, {UrlInput} from "components/dashboard/UrlStatsAddModal";
 import {Button} from "react-bootstrap";
 import Logger from "js-logger";
+import UrlStatsAddModal, {UrlInput} from "components/dashboard/modals/UrlStatsAddModal";
 
 
 let getEmpty = () => new UrlInput(Math.random(), 'bla')

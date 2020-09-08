@@ -6,11 +6,13 @@
 import {AxiosInstance} from "axios";
 import renderComponent from 'utilities/render-component'
 import Dashboard from "components/Dashboard";
+import {GlobalLogger} from "js-logger/src/types";
 
 const React = require("react");
 
 declare global {
     interface Window {
+        Logger: GlobalLogger;
         _: any;
         $: any;
         jQuery: any;
@@ -28,7 +30,7 @@ let appDOM = document.getElementById('app')
 
 renderComponent(appDOM, 'Dashboard', (element) => {
     let user = JSON.parse(element.dataset.user)
-    return <Dashboard user={user}/>
+    return <Dashboard user={user} initiallastRequestId={element.dataset.lastRequestId}/>
 })
 
 //

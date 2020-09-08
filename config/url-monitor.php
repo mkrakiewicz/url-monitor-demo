@@ -6,7 +6,7 @@ return [
     ],
     'jobs' => [
         'chunk-url-count' => 100,
-        'stat-timeout' => 15
+        'stat-timeout' => 10
     ],
     'store' => [
         'stat-timeout' => 2.0

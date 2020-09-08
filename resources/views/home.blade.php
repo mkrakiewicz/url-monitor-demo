@@ -14,7 +14,7 @@
 
         <div class="row justify-content-center my-2">
             <div class="col-md-10">
-                <div class="row mb-5">
+                <div class="row mb-3">
                     <div class="col-md">
                         <h1>Your sites</h1>
                     </div>
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 </div>
-                <Dashboard data-user='@json($user)'></Dashboard>
+                <Dashboard data-user='@json($user)' data-last-request-id="{{ $lastRequestId }}"></Dashboard>
             </div>
         </div>
     </div>

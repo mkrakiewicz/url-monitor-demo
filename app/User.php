@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return "user-urls:{$this->id}";
     }
+
+    public function getLastRequestIdCacheKey(): string
+    {
+        return "user-request-last-id:{$this->id}";
+    }
 }

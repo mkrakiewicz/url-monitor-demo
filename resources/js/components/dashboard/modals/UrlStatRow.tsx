@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import StatusCode from './StatusCode'
+import StatusCode from 'components/dashboard/StatusCode'
 import {useCallback, useState} from "react";
 import React from 'react';
 

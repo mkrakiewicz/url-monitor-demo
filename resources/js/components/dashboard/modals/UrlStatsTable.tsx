@@ -1,7 +1,7 @@
 import React from 'react'
 import * as Logger from 'js-logger'
 import moment from "moment";
-import UrlStatRow from 'components/dashboard/UrlStatRow'
+import UrlStatRow from 'components/dashboard/modals/UrlStatRow'
 
 function UrlStatsTable({urlData}) {
     if (urlData.requests.length === 0) {

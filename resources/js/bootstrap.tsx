@@ -4,6 +4,7 @@ window._ = require('lodash')
  * Logger
  */
 let Logger = require('js-logger')
+window.Logger = Logger;
 Logger.useDefaults();
 
 
@@ -15,6 +16,9 @@ if (!logsEnabled) {
     Logger.setLevel(Logger.OFF)
 }
 
+Logger.info('Logs enabled.')
+
+
 try {
     window.Popper = require('popper.js').default
     window.$ = window.jQuery = require('jquery')
@@ -22,8 +26,6 @@ try {
     require('bootstrap')
 } catch (e) {
 }
-
-
 Logger.info('APP_ENV', window.APP_ENV)
 
 /**

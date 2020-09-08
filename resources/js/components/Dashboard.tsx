@@ -1,13 +1,13 @@
 import React, {useCallback, useEffect, useReducer, useState} from 'react'
 import Url from "entities/Url";
-import UrlStatsModal from 'components/dashboard/UrlStatsModal'
+import UrlStatsModal from 'components/dashboard/modals/UrlStatsModal'
 import UrlViewerCard from 'components/dashboard/UrlViewerCard'
 import IUrlResponse from "responses/IUrlResponse";
-import UrlMonitorAddButton from "components/dashboard/UrlMonitorAddButton";
-import UrlStatsAddModal, {UrlInput} from "components/dashboard/UrlStatsAddModal";
-import Logger from "js-logger";
+import UrlStatsAddModal, {UrlInput} from "./dashboard/modals/UrlStatsAddModal";
+// import Logger from "js-logger";
 import {Button} from "react-bootstrap";
-
+import {PuffLoader} from 'react-spinners'
+import {useDebounce} from 'use-debounce';
 
 let getEmpty = () => new UrlInput(Math.random(), 'bla')
 let getEmptyMap = () => {
@@ -38,7 +38,6 @@ function reducer(state, action) {
 }
 
 
-
 let refreshUrlList = function (appurl, user, setUrls: (value: (((prevState: Array<Url>) => Array<Url>) | Array<Url>)) => void) {
     return window.axios.get<Array<IUrlResponse>>(`${appurl}/api/user/${user.id}/urls`).then((response) => {
         let urls = response.data.map((data) => new Url(data));
@@ -51,10 +50,15 @@ let refreshUrlList = function (appurl, user, setUrls: (value: (((prevState: Arra
     });
 };
 
-function Dashboard({user}) {
+let eventSource;
 
+function Dashboard({user, initiallastRequestId}) {
+
+    const [isLoading, setIsLoading] = useState(false)
     const [urls, setUrls] = useState<Array<Url>>([])
     const [isHighlight, setIsHighlight] = useState(false)
+    const [lastRequestId, setLastRequestId] = useState(initiallastRequestId)
+    const [debouncedLastRequestId] = useDebounce(lastRequestId, 5000)
     const [showModal, setShowModal] = useState(false)
     const [modalUrlData, setModalUrlData] = useState({requests: [], url: {}})
     const [showAddModal, setShowAddModal] = useState(false)
@@ -66,16 +70,20 @@ function Dashboard({user}) {
         Logger.debug('appurl', appurl)
         Logger.debug('user', user)
         let items = Array.from(state.inputs.keys()).map((key) => state.inputs.get(key).value)
+        setIsLoading(true)
         window.axios.post(`${appurl}/api/user/${user.id}/bulk-monitor`, {items: items})
             .then((response) => {
-                alert('ok')
+                setIsLoading(false)
             }).catch(response => {
             Logger.debug('fail', response)
             if (response.response.status === 401) {
                 alert('Unauthorized. Please login again.')
             }
-        }).then(()=>{
-            refreshUrlList(appurl, user, setUrls)
+        }).then(() => {
+            setIsLoading(true)
+            refreshUrlList(appurl, user, setUrls).then(() => {
+                setIsLoading(false)
+            })
         })
         setShowAddModal(false)
         // window.location.reload()
@@ -88,7 +96,7 @@ function Dashboard({user}) {
         // setInputs(inputs)
     }, [])
 
-    let onAdd = () => {
+    let onAdd = useCallback(() => {
         Logger.debug('clicked')
         // let newInputs = inputs;
         // let index = newInputs.push()
@@ -96,7 +104,7 @@ function Dashboard({user}) {
 
 
         Logger.debug('inputs', state.inputs)
-    }
+    }, [])
 
     let onButtonClicked = useCallback(() => {
         setShowAddModal(true)
@@ -109,11 +117,28 @@ function Dashboard({user}) {
     }, [])
 
     useEffect(() => {
+        eventSource = new EventSource(`/api/user/${user.id}/requests/watch`)
+        eventSource.onmessage = (message) => {
+            window.Logger.debug('Message', message)
+            console.log('Message', message)
+            let newLastId = JSON.parse(message.data).lastRequestId.toString()
+            // if (lastRequestId !== newLastId) {
+            setLastRequestId(newLastId)
+            // }
+        }
+    }, [])
+
+    useEffect(() => {
         let appurl = (window as any).API_URL
         Logger.debug('appurl', appurl)
         Logger.debug('user', user)
-        refreshUrlList(appurl, user, setUrls)
-    }, [])
+        Logger.info('Running refreshUrlList', {'debouncedLastRequestId': debouncedLastRequestId})
+        setIsLoading(true)
+        refreshUrlList(appurl, user, setUrls).then(() => {
+            setIsLoading(false)
+        })
+    }, [debouncedLastRequestId])
+
 
     let closeModal = useCallback(() => {
         setShowModal(false)
@@ -135,7 +160,14 @@ function Dashboard({user}) {
     return (
 
         <>
-            <Button type='primary' onClick={onButtonClicked}>Add</Button>
+            <div className="row mb-2">
+                <div className="col-md-8">
+                     <PuffLoader loading={isLoading} size={30} css={`display:inline-block`}/>
+                </div>
+                <div className="col-md-4 text-right">
+                    <Button type='primary' onClick={onButtonClicked}>Add Url Monitor</Button>
+                </div>
+            </div>
             <UrlStatsAddModal onSubmit={onSubmit} show={showAddModal} onCloseRequest={closeModal} inputs={state.inputs}
                               onAdd={onAdd} onChange={onChange}/>
 

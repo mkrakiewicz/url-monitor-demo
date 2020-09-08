@@ -8,6 +8,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class UrlRequestRepository
 {
@@ -61,5 +62,14 @@ class UrlRequestRepository
         $createdAt = "{$url->requests()->getModel()->getTable()}.{$url->requests()->createdAt()}";
         $time = now()->subMinutes($minuteLimit);
         return $url->requests()->with('stat')->where($createdAt, '>', $time)->get();
+    }
+
+    public function getLastRequest(User $user): ?UrlRequest
+    {
+        return Cache::rememberForever(
+            $user->getLastRequestIdCacheKey(),
+            function () use ($user) {
+                return $user->requests()->latest()->first();
+            });
     }
 }
